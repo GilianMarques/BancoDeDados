@@ -11,9 +11,12 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import dev.gmarques.bancodedados.data.entidades.CampoEntidade
 import dev.gmarques.bancodedados.data.entidades.InstanciaEntidade
 import dev.gmarques.bancodedados.data.room.RoomDb
 import dev.gmarques.bancodedados.databinding.ActivityMainBinding
+import dev.gmarques.bancodedados.domain.TipoCampo
+import dev.gmarques.bancodedados.domain.modelos.Campo
 import dev.gmarques.bancodedados.domain.modelos.Instancia
 import kotlinx.coroutines.runBlocking
 
@@ -41,16 +44,7 @@ class MainActivity : AppCompatActivity() {
                 .setAction("Action", null).show()
         }
 
-        runBlocking {
-            val x = Instancia().apply { templateUid = "???" }
-            val y = InstanciaEntidade(x)
-            RoomDb.getInstancia().instanciaDao().addOuAtualizar(y)
 
-            val z = RoomDb.getInstancia().instanciaDao().getTodasInstancias("???")
-            Log.d("USUK", "MainActivity.onCreate: chaves ${z.keys.size} valores ${z.values.size}")
-
-            Log.d("USUK", "MainActivity.onCreate: sucesso? ${z.containsKey(y)}")
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -74,4 +68,6 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
     }
+
+
 }

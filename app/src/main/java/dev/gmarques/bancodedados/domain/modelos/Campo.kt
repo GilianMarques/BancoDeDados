@@ -3,7 +3,12 @@ package dev.gmarques.bancodedados.domain.modelos
 import dev.gmarques.bancodedados.domain.TipoCampo
 import java.util.*
 
-class Campo {
+class Campo() {
+
+    constructor(instanciaUid: String, tipo: TipoCampo) : this() {
+        this.instanciaUid = instanciaUid
+        this.tipoCampo = tipo
+    }
 
     lateinit var instanciaUid: String
 

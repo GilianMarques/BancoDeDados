@@ -22,4 +22,23 @@ class InstanciaEntidade() {
     var uid: String = UUID.randomUUID().toString()
 
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as InstanciaEntidade
+
+        if (templateUid != other.templateUid) return false
+        if (uid != other.uid) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = templateUid.hashCode()
+        result = 31 * result + uid.hashCode()
+        return result
+    }
+
+
 }
