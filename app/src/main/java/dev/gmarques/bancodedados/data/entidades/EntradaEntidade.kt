@@ -3,11 +3,25 @@ package dev.gmarques.bancodedados.data.entidades
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import dev.gmarques.bancodedados.domain.TipoCampo
+import dev.gmarques.bancodedados.domain.modelos.TipoCampo
+import dev.gmarques.bancodedados.domain.modelos.template.Entrada
 import java.util.*
 
-@Entity(tableName = "campos_ui")
-class CampoUiEntidade() {
+@Entity(tableName = "entradas")
+class EntradaEntidade() {
+
+    constructor(entrada: Entrada) : this() {
+        this.uid = entrada.uid
+        this.nome = entrada.nome
+        this.templateUid = entrada.templateUid
+        this.tipoCampo = entrada.tipoCampo
+        this.podeSerVazio = entrada.podeSerVazio
+        this.comprimentoMaximo = entrada.comprimentoMaximo
+        this.comprimentoMinimo = entrada.comprimentoMinimo
+        this.maiorQue = entrada.maiorQue
+        this.menorQue = entrada.menorQue
+
+    }
 
     @ColumnInfo(name = "uid")
     @PrimaryKey

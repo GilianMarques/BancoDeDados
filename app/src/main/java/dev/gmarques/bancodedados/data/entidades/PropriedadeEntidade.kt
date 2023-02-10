@@ -3,14 +3,14 @@ package dev.gmarques.bancodedados.data.entidades
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import dev.gmarques.bancodedados.domain.TipoCampo
-import dev.gmarques.bancodedados.domain.modelos.Campo
+import dev.gmarques.bancodedados.domain.modelos.TipoCampo
+import dev.gmarques.bancodedados.domain.modelos.instancia.Propriedade
 import java.util.*
 
-@Entity(tableName = "campos")
-class CampoEntidade() {
+@Entity(tableName = "propriedades")
+class PropriedadeEntidade() {
 
-    constructor(mCampo: Campo) : this() {
+    constructor(mCampo: Propriedade) : this() {
 
         this.instanciaUid = mCampo.instanciaUid
         this.uid = mCampo.uid
@@ -48,7 +48,7 @@ class CampoEntidade() {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as CampoEntidade
+        other as PropriedadeEntidade
 
         if (instanciaUid != other.instanciaUid) return false
         if (uid != other.uid) return false

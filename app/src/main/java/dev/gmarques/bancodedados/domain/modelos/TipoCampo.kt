@@ -1,4 +1,4 @@
-package dev.gmarques.bancodedados.domain
+package dev.gmarques.bancodedados.domain.modelos
 
 enum class TipoCampo(valor: String) {
     NUMERO("numero"),

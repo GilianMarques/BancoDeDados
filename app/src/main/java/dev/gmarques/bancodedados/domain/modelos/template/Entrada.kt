@@ -1,13 +1,11 @@
-package dev.gmarques.bancodedados.domain.modelos
+package dev.gmarques.bancodedados.domain.modelos.template
 
-import dev.gmarques.bancodedados.domain.TipoCampo
+import dev.gmarques.bancodedados.domain.modelos.TipoCampo
 import java.util.*
 
-class CampoUi {
+class Entrada(var templateUid: String, var tipoCampo: TipoCampo) {
     val uid: String = UUID.randomUUID().toString()
     var nome = ""
-    var templateUid = ""
-    lateinit var tipoCampo: TipoCampo
     var podeSerVazio = false
     var comprimentoMaximo = 25
     var comprimentoMinimo = 0

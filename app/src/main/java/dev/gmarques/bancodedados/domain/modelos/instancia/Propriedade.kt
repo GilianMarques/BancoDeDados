@@ -1,9 +1,9 @@
-package dev.gmarques.bancodedados.domain.modelos
+package dev.gmarques.bancodedados.domain.modelos.instancia
 
-import dev.gmarques.bancodedados.domain.TipoCampo
+import dev.gmarques.bancodedados.domain.modelos.TipoCampo
 import java.util.*
 
-class Campo() {
+class Propriedade() {
 
     constructor(instanciaUid: String, tipo: TipoCampo) : this() {
         this.instanciaUid = instanciaUid

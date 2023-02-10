@@ -3,7 +3,7 @@ package dev.gmarques.bancodedados.data.entidades
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import dev.gmarques.bancodedados.domain.modelos.Instancia
+import dev.gmarques.bancodedados.domain.modelos.instancia.Instancia
 import java.util.*
 
 @Entity(tableName = "instancias")
