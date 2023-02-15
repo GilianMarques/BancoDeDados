@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="dev.gmarques.bancodedados.FirstFragment"
+        android:name="dev.gmarques.bancodedados.FragmentoPrincipal"
         android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_first">
+        tools:layout="@layout/frag_principal">
 
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"

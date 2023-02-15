@@ -3,8 +3,7 @@ package dev.gmarques.bancodedados.data.room.dao
 import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import dev.gmarques.bancodedados.data.entidades.EntradaEntidade
-import dev.gmarques.bancodedados.data.entidades.TemplateEntidade
+import dev.gmarques.bancodedados.data.Mapeador
 import dev.gmarques.bancodedados.data.room.RoomDb
 import dev.gmarques.bancodedados.domain.modelos.TipoCampo
 import dev.gmarques.bancodedados.domain.modelos.template.Entrada
@@ -32,7 +31,7 @@ class TemplateDaoTest : TestCase() {
         db = Room.inMemoryDatabaseBuilder(appContext, RoomDb::class.java).build()
 
         templateDao = db.templateDao()
-        entradaUiDao = db.campoUiDao()
+        entradaUiDao = db.entradaDao()
     }
 
     @After
@@ -52,10 +51,9 @@ class TemplateDaoTest : TestCase() {
             podeSerVazio = true
         }
 
-        templateDao.addOuAtualizar(TemplateEntidade(template))
-
-        entradaUiDao.addOuAtualizar(EntradaEntidade(campo1))
-        entradaUiDao.addOuAtualizar(EntradaEntidade(campo2))
+        templateDao.addOuAtualizar(Mapeador.entidadeDe(template))
+        entradaUiDao.addOuAtualizar(Mapeador.entidadeDe(campo1))
+        entradaUiDao.addOuAtualizar(Mapeador.entidadeDe(campo2))
 
         val templates = templateDao.getTodosOsTemplates()
 

@@ -1,4 +1,4 @@
-package dev.gmarques.bancodedados.data.entidades
+package dev.gmarques.bancodedados.data.room.entidades
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -7,14 +7,9 @@ import dev.gmarques.bancodedados.domain.modelos.template.Template
 import java.util.UUID
 
 @Entity(tableName = "templates")
-class TemplateEntidade() {
+class TemplateEntidade {
 
-    constructor(template: Template) : this() {
-        this.uid = template.uid
-        this.nome = template.nome
-    }
-
-    @ColumnInfo(name = "uid")
+       @ColumnInfo(name = "uid")
     @PrimaryKey
     var uid: String = UUID.randomUUID().toString()
 

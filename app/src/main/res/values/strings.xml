@@ -43,4 +43,7 @@
         libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
+    <string name="Adicionar_objeto">Adicionar objeto</string>
+    <string name="Colecoes">Coleções</string>
+    <string name="X_objetos_registrados">%1$d objetos registrados</string>
 </resources>

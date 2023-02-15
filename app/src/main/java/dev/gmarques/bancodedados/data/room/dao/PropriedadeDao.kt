@@ -2,7 +2,7 @@ package dev.gmarques.bancodedados.data.room.dao
 
 import androidx.room.Dao
 import androidx.room.Query
-import dev.gmarques.bancodedados.data.entidades.PropriedadeEntidade
+import dev.gmarques.bancodedados.data.room.entidades.PropriedadeEntidade
 
 @Dao
 abstract class PropriedadeDao : BaseDao<PropriedadeEntidade>() {

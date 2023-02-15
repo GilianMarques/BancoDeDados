@@ -1,4 +1,4 @@
-package dev.gmarques.bancodedados.data.entidades
+package dev.gmarques.bancodedados.data.room.entidades
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -8,20 +8,7 @@ import dev.gmarques.bancodedados.domain.modelos.template.Entrada
 import java.util.*
 
 @Entity(tableName = "entradas")
-class EntradaEntidade() {
-
-    constructor(entrada: Entrada) : this() {
-        this.uid = entrada.uid
-        this.nome = entrada.nome
-        this.templateUid = entrada.templateUid
-        this.tipoCampo = entrada.tipoCampo
-        this.podeSerVazio = entrada.podeSerVazio
-        this.comprimentoMaximo = entrada.comprimentoMaximo
-        this.comprimentoMinimo = entrada.comprimentoMinimo
-        this.maiorQue = entrada.maiorQue
-        this.menorQue = entrada.menorQue
-
-    }
+class EntradaEntidade {
 
     @ColumnInfo(name = "uid")
     @PrimaryKey

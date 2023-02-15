@@ -4,8 +4,7 @@ import android.util.Log
 import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import dev.gmarques.bancodedados.data.entidades.PropriedadeEntidade
-import dev.gmarques.bancodedados.data.entidades.InstanciaEntidade
+import dev.gmarques.bancodedados.data.Mapeador
 import dev.gmarques.bancodedados.data.room.dao.PropriedadeDao
 import dev.gmarques.bancodedados.data.room.dao.InstanciaDao
 import dev.gmarques.bancodedados.domain.modelos.TipoCampo
@@ -40,16 +39,17 @@ class InstanciaDaoTest : TestCase() {
     }
 
     @Test
-    fun addOuAtualizarInstanciaCom2Campos() = runBlocking {
+    fun addOuAtualizarInstanciaComCampos() = runBlocking {
 
         val mInstancia = Instancia().apply { this.templateUid = "templateUid_123" }
-        val mInstanciaEntidade = InstanciaEntidade(mInstancia)
+        val mInstanciaEntidade = Mapeador.entidadeDe(mInstancia)
 
         val mCampoDouble = Propriedade(mInstancia.uid, TipoCampo.NUMERO).apply { valorDouble = 999 }
-        val mDoubleEntidade = PropriedadeEntidade(mCampoDouble)
+        val mDoubleEntidade = Mapeador.entidadeDe(mCampoDouble)
 
-        val mCampoBoolean = Propriedade(mInstancia.uid, TipoCampo.REAL).apply { valorBoolean = true }
-        val mBooleanEntidade = PropriedadeEntidade(mCampoBoolean)
+        val mCampoBoolean =
+            Propriedade(mInstancia.uid, TipoCampo.REAL).apply { valorBoolean = true }
+        val mBooleanEntidade = Mapeador.entidadeDe(mCampoBoolean)
 
         campoDao.addOuAtualizar(mDoubleEntidade)
         campoDao.addOuAtualizar(mBooleanEntidade)

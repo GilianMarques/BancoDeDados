@@ -1,9 +1,9 @@
-package dev.gmarques.bancodedados.data.entidades.relacoes
+package dev.gmarques.bancodedados.data.room.entidades.relacoes
 
 import androidx.room.Embedded
 import androidx.room.Relation
-import dev.gmarques.bancodedados.data.entidades.PropriedadeEntidade
-import dev.gmarques.bancodedados.data.entidades.InstanciaEntidade
+import dev.gmarques.bancodedados.data.room.entidades.PropriedadeEntidade
+import dev.gmarques.bancodedados.data.room.entidades.InstanciaEntidade
 
 /**
  * Data class para recuperar do banco de dados objetos "Instancia" com seus propriedades em uma unica query
