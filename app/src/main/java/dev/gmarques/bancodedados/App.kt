@@ -32,9 +32,9 @@ class App : Application() {
                 comprimentoMaximo = 2
             }
 
-            RoomDb.getInstancia().templateDao().addOuAtualizar(Mapeador.entidadeDe(musica))
-            RoomDb.getInstancia().entradaDao().addOuAtualizar(Mapeador.entidadeDe(artista))
-            RoomDb.getInstancia().entradaDao().addOuAtualizar(Mapeador.entidadeDe(faixa))
+            RoomDb.getInstancia().templateDao().addOuAtualizar(Mapeador.getTemplateEntidade(musica))
+            RoomDb.getInstancia().entradaDao().addOuAtualizar(Mapeador.getEntradaEntidade(artista))
+            RoomDb.getInstancia().entradaDao().addOuAtualizar(Mapeador.getEntradaEntidade(faixa))
 
 
             val jogos = Template("Jogos")
@@ -46,9 +46,9 @@ class App : Application() {
                 nome = "Jogado"
             }
 
-            RoomDb.getInstancia().templateDao().addOuAtualizar(Mapeador.entidadeDe(jogos))
-            RoomDb.getInstancia().entradaDao().addOuAtualizar(Mapeador.entidadeDe(genero))
-            RoomDb.getInstancia().entradaDao().addOuAtualizar(Mapeador.entidadeDe(jaJogado))
+            RoomDb.getInstancia().templateDao().addOuAtualizar(Mapeador.getTemplateEntidade(jogos))
+            RoomDb.getInstancia().entradaDao().addOuAtualizar(Mapeador.getEntradaEntidade(genero))
+            RoomDb.getInstancia().entradaDao().addOuAtualizar(Mapeador.getEntradaEntidade(jaJogado))
 
         }
     }

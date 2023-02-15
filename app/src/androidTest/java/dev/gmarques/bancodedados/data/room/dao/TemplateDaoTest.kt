@@ -51,9 +51,9 @@ class TemplateDaoTest : TestCase() {
             podeSerVazio = true
         }
 
-        templateDao.addOuAtualizar(Mapeador.entidadeDe(template))
-        entradaUiDao.addOuAtualizar(Mapeador.entidadeDe(campo1))
-        entradaUiDao.addOuAtualizar(Mapeador.entidadeDe(campo2))
+        templateDao.addOuAtualizar(Mapeador.getTemplateEntidade(template))
+        entradaUiDao.addOuAtualizar(Mapeador.getEntradaEntidade(campo1))
+        entradaUiDao.addOuAtualizar(Mapeador.getEntradaEntidade(campo2))
 
         val templates = templateDao.getTodosOsTemplates()
 

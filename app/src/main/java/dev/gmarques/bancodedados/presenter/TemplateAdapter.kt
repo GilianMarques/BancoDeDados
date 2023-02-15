@@ -27,6 +27,12 @@ class TemplateAdapter(val fragmento: Fragment) :
 
     override fun onBindViewHolder(holder: Holder, position: Int) = holder.bind(position)
 
+    fun atualizar(itens: ArrayList<Template>) {
+        this.itens.clear()
+        this.itens.addAll(itens)
+        notifyDataSetChanged()
+    }
+
     inner class Holder(val itemBinding: ItemTemplateBinding) :
         RecyclerView.ViewHolder(itemBinding.root) {
         fun bind(position: Int) {

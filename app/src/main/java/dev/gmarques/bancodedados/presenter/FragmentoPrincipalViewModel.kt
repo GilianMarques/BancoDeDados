@@ -13,8 +13,9 @@ class FragmentoPrincipalViewModel : ViewModel() {
 
     val templates: LiveData<ArrayList<Template>> get() = mutableTemplates
 
-    fun carregarTemplates(){
+    suspend fun carregarTemplates() {
         val templates = TemplatesRepo.carregarTemplates()
+        mutableTemplates.value = templates
     }
 
 }

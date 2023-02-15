@@ -42,14 +42,14 @@ class InstanciaDaoTest : TestCase() {
     fun addOuAtualizarInstanciaComCampos() = runBlocking {
 
         val mInstancia = Instancia().apply { this.templateUid = "templateUid_123" }
-        val mInstanciaEntidade = Mapeador.entidadeDe(mInstancia)
+        val mInstanciaEntidade = Mapeador.getInstanciaEntidade(mInstancia)
 
         val mCampoDouble = Propriedade(mInstancia.uid, TipoCampo.NUMERO).apply { valorDouble = 999 }
-        val mDoubleEntidade = Mapeador.entidadeDe(mCampoDouble)
+        val mDoubleEntidade = Mapeador.getPropriedadeEntidade(mCampoDouble)
 
         val mCampoBoolean =
             Propriedade(mInstancia.uid, TipoCampo.REAL).apply { valorBoolean = true }
-        val mBooleanEntidade = Mapeador.entidadeDe(mCampoBoolean)
+        val mBooleanEntidade = Mapeador.getPropriedadeEntidade(mCampoBoolean)
 
         campoDao.addOuAtualizar(mDoubleEntidade)
         campoDao.addOuAtualizar(mBooleanEntidade)
