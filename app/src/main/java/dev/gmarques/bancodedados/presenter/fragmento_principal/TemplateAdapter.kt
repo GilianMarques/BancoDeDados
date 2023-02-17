@@ -1,11 +1,9 @@
-package dev.gmarques.bancodedados.presenter
+package dev.gmarques.bancodedados.presenter.fragmento_principal
 
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
-import androidx.room.Room
 import dev.gmarques.bancodedados.R
 import dev.gmarques.bancodedados.data.room.RoomDb
 import dev.gmarques.bancodedados.databinding.ItemTemplateBinding
@@ -35,13 +33,14 @@ class TemplateAdapter(val fragmento: Fragment) :
 
     inner class Holder(val itemBinding: ItemTemplateBinding) :
         RecyclerView.ViewHolder(itemBinding.root) {
+
         fun bind(position: Int) {
 
             itemBinding.tvNome.text = itens[position].nome
+
             fragmento.lifecycleScope.launch(IO) {
-                // TODO: tentar obter o tamamanho ser ler tudo
-                val instancias = RoomDb.getInstancia()
-                    .instanciaDao().getInstanciasComCampos(itens[position].uid)
+
+                val instancias = RoomDb.getInstancia().instanciaDao().contarInstancias()
 
                 withContext(Main) {
                     itemBinding.tvQuantidade.text = String.format(
@@ -53,6 +52,7 @@ class TemplateAdapter(val fragmento: Fragment) :
             }
 
         }
+
 
     }
 }

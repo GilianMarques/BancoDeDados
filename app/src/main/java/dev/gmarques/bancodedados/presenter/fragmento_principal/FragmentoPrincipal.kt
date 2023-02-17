@@ -1,6 +1,7 @@
-package dev.gmarques.bancodedados
+package dev.gmarques.bancodedados.presenter.fragmento_principal
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,14 +10,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import dev.gmarques.bancodedados.R
 import dev.gmarques.bancodedados.databinding.FragPrincipalBinding
-import dev.gmarques.bancodedados.presenter.FragmentoPrincipalViewModel
-import dev.gmarques.bancodedados.presenter.TemplateAdapter
+import dev.gmarques.bancodedados.domain.modelos.template.Template
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class FragmentoPrincipal : Fragment() {
-// TODO: popular a tela cm dados dos tempaltes
 
     private lateinit var binding: FragPrincipalBinding
     private lateinit var viewModel: FragmentoPrincipalViewModel
@@ -55,7 +57,8 @@ class FragmentoPrincipal : Fragment() {
         adapter = TemplateAdapter(this@FragmentoPrincipal)
         binding.rvTemplates.layoutManager = LinearLayoutManager(requireContext())
         binding.rvTemplates.adapter = adapter
-        lifecycleScope.launch { viewModel.carregarTemplates() }
+
+
     }
 
     private fun atualizarToolbar() {
@@ -64,8 +67,26 @@ class FragmentoPrincipal : Fragment() {
 
     private fun initBotaoAddObjeto() {
         binding.fabAddObjeto.setOnClickListener {
-            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+            carregarTemplatesEMostrarDialogoSeMaisDeUm()
         }
+    }
+
+    private fun carregarTemplatesEMostrarDialogoSeMaisDeUm() =
+        lifecycleScope.launch(Dispatchers.IO) {
+
+            val templates = viewModel.getTemplates()
+
+            if (templates.size == 1) abrirFragmentoAdicionarInstancia(templates[0])
+            else withContext(Dispatchers.Main) {
+                DialogoEscolherInstanciaParaAdicionar(templates, this@FragmentoPrincipal)
+                { abrirFragmentoAdicionarInstancia(it) }
+            }
+        }
+
+
+    private fun abrirFragmentoAdicionarInstancia(template: Template) {
+        val action = FragmentoPrincipalDirections.actionAddInstancia(template)
+        findNavController().navigate(action)
     }
 
 

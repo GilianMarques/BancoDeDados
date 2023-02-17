@@ -12,8 +12,6 @@ object TemplatesRepo {
         val templates = ArrayList<Template>()
         RoomDb.getInstancia().templateDao().getTodosOsTemplates()
             .forEach {
-                // TODO: converter e retornar templates
-                // TODO: depois terminar de popular interface
                 templates.add(Mapeador.getTemplate(it))
             }
 

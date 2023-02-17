@@ -3,7 +3,7 @@ package dev.gmarques.bancodedados.domain.modelos.template
 import dev.gmarques.bancodedados.domain.modelos.TipoCampo
 import java.util.*
 
-class Entrada(var templateUid: String, var tipoCampo: TipoCampo) {
+class Entrada(var templateUid: String, var tipoCampo: TipoCampo) :java.io.Serializable{
     val uid: String = UUID.randomUUID().toString()
     var nome = ""
     var podeSerVazio = false

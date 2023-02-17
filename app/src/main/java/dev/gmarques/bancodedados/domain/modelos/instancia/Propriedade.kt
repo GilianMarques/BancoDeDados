@@ -3,7 +3,7 @@ package dev.gmarques.bancodedados.domain.modelos.instancia
 import dev.gmarques.bancodedados.domain.modelos.TipoCampo
 import java.util.*
 
-class Propriedade() {
+class Propriedade():java.io.Serializable{
 
     constructor(instanciaUid: String, tipo: TipoCampo) : this() {
         this.instanciaUid = instanciaUid

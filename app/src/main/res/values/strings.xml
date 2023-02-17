@@ -46,4 +46,6 @@
     <string name="Adicionar_objeto">Adicionar objeto</string>
     <string name="Colecoes">Coleções</string>
     <string name="X_objetos_registrados">%1$d objetos registrados</string>
+    <string name="O_que_deseja_adicionar">O que deseja adicionar?</string>
+    <string name="Novo_a_instancia">Novo(a) %1$s</string>
 </resources>

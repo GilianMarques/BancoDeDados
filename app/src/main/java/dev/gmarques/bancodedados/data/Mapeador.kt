@@ -1,6 +1,7 @@
 package dev.gmarques.bancodedados.data
 
-import com.google.gson.Gson
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import dev.gmarques.bancodedados.data.room.entidades.EntradaEntidade
 import dev.gmarques.bancodedados.data.room.entidades.InstanciaEntidade
 import dev.gmarques.bancodedados.data.room.entidades.PropriedadeEntidade
@@ -10,36 +11,46 @@ import dev.gmarques.bancodedados.domain.modelos.instancia.Instancia
 import dev.gmarques.bancodedados.domain.modelos.instancia.Propriedade
 import dev.gmarques.bancodedados.domain.modelos.template.Entrada
 import dev.gmarques.bancodedados.domain.modelos.template.Template
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.withContext
 
 // TODO: criar teste pra essa classe, preciso saber se o objeto segue o mesmo so converter e desconverter em outro
 object Mapeador {
+        // https://stackabuse.com/reading-and-writing-json-in-kotlin-with-jackson/
+    val jackson = jacksonObjectMapper()
 
-    private val gson = Gson()
+    suspend fun getInstanciaEntidade(mInstancia: Instancia): InstanciaEntidade = withContext(IO) {
+        jackson.readValue(jackson.writeValueAsString(mInstancia))
+    }
 
-    fun getInstanciaEntidade(mInstancia: Instancia): InstanciaEntidade =
-        gson.fromJson(gson.toJson(mInstancia), InstanciaEntidade::class.java)
+    suspend fun getPropriedadeEntidade(mPropriedade: Propriedade): PropriedadeEntidade =
+        withContext(IO) {
+            jackson.readValue(jackson.writeValueAsString(mPropriedade))
+        }
+
+    suspend fun getTemplateEntidade(mTemplate: Template): TemplateEntidade = withContext(IO) {
+        jackson.readValue(jackson.writeValueAsString(mTemplate))
+    }
+
+    suspend fun getEntradaEntidade(mEntrada: Entrada): EntradaEntidade = withContext(IO) {
+        jackson.readValue(jackson.writeValueAsString(mEntrada))
+    }
 
 
-    fun getPropriedadeEntidade(mPropriedade: Propriedade): PropriedadeEntidade =
-        gson.fromJson(gson.toJson(mPropriedade), PropriedadeEntidade::class.java)
+    suspend fun getTemplate(templateComEntradas: TemplateComEntradas): Template = withContext(IO) {
 
 
-    fun getTemplateEntidade(mTemplate: Template): TemplateEntidade =
-        gson.fromJson(gson.toJson(mTemplate), TemplateEntidade::class.java)
-
-
-    fun getEntradaEntidade(mEntrada: Entrada): EntradaEntidade =
-        gson.fromJson(gson.toJson(mEntrada), EntradaEntidade::class.java)
-
-    fun getTemplate(templateComEntradas: TemplateComEntradas): Template {
-
-        val template = gson.fromJson(gson.toJson(templateComEntradas.template), Template::class.java)
+        val template: Template =
+            jackson.readValue(jackson.writeValueAsString(templateComEntradas.template))
 
         templateComEntradas.entradas.forEach {
-            val entrada = gson.fromJson(gson.toJson(it), Entrada::class.java)
+
+            val entradaEntidadeString: String = jackson.writeValueAsString(it)
+            val entrada: Entrada = jackson.readValue(entradaEntidadeString)
             template.entradas.add(entrada)
+
         }
-        return template
+        return@withContext template
     }
 
 
