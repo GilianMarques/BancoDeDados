@@ -1,5 +1,6 @@
 package dev.gmarques.bancodedados.data.repositorios
 
+import android.util.Log
 import dev.gmarques.bancodedados.data.Mapeador
 import dev.gmarques.bancodedados.data.room.RoomDb
 import dev.gmarques.bancodedados.domain.modelos.template.Template

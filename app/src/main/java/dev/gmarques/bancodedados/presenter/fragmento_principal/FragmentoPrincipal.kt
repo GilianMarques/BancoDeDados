@@ -39,7 +39,7 @@ class FragmentoPrincipal : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(this).get(FragmentoPrincipalViewModel::class.java)
+        viewModel = ViewModelProvider(this)[FragmentoPrincipalViewModel::class.java]
 
         atualizarToolbar()
         initBotaoAddObjeto()
@@ -57,8 +57,6 @@ class FragmentoPrincipal : Fragment() {
         adapter = TemplateAdapter(this@FragmentoPrincipal)
         binding.rvTemplates.layoutManager = LinearLayoutManager(requireContext())
         binding.rvTemplates.adapter = adapter
-
-
     }
 
     private fun atualizarToolbar() {
@@ -82,7 +80,6 @@ class FragmentoPrincipal : Fragment() {
                 { abrirFragmentoAdicionarInstancia(it) }
             }
         }
-
 
     private fun abrirFragmentoAdicionarInstancia(template: Template) {
         val action = FragmentoPrincipalDirections.actionAddInstancia(template)

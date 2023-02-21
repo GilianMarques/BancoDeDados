@@ -1,5 +1,6 @@
 package dev.gmarques.bancodedados.presenter.fragmento_principal
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -20,6 +21,7 @@ class FragmentoPrincipalViewModel : ViewModel() {
     }
 
     suspend fun carregarTemplates() {
+        Log.d("USUK", "FragmentoPrincipalViewModel.carregarTemplates: lendo db")
         mutableTemplates.value = TemplatesRepo.carregarTemplates()
     }
 

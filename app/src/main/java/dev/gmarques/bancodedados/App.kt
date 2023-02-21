@@ -4,7 +4,7 @@ import android.app.Application
 import dev.gmarques.bancodedados.data.Mapeador
 import dev.gmarques.bancodedados.data.room.RoomDb
 import dev.gmarques.bancodedados.domain.modelos.TipoCampo
-import dev.gmarques.bancodedados.domain.modelos.template.Entrada
+import dev.gmarques.bancodedados.domain.modelos.template.Campo
 import dev.gmarques.bancodedados.domain.modelos.template.Template
 import kotlinx.coroutines.runBlocking
 
@@ -23,11 +23,11 @@ class App : Application() {
 
 
             val musica = Template("Musica")
-            val artista = Entrada(musica.uid, TipoCampo.TEXTO).apply {
+            val artista = Campo(musica.uid, TipoCampo.TEXTO).apply {
                 nome = "Artista"
                 comprimentoMaximo = 30
             }
-            val faixa = Entrada(musica.uid, TipoCampo.NUMERO).apply {
+            val faixa = Campo(musica.uid, TipoCampo.NUMERO).apply {
                 nome = "N° faixa"
                 comprimentoMaximo = 2
             }
@@ -38,11 +38,11 @@ class App : Application() {
 
 
             val jogos = Template("Jogos")
-            val genero = Entrada(jogos.uid, TipoCampo.TEXTO).apply {
+            val genero = Campo(jogos.uid, TipoCampo.TEXTO).apply {
                 nome = "Genero"
                 comprimentoMaximo = 30
             }
-            val jaJogado = Entrada(jogos.uid, TipoCampo.REAL).apply {
+            val jaJogado = Campo(jogos.uid, TipoCampo.REAL).apply {
                 nome = "Jogado"
             }
 

@@ -23,7 +23,9 @@ class TemplateAdapter(val fragmento: Fragment) :
 
     override fun getItemCount() = itens.size
 
-    override fun onBindViewHolder(holder: Holder, position: Int) = holder.bind(position)
+    override fun onBindViewHolder(holder: Holder, position: Int) {
+        holder.bind(position)
+    }
 
     fun atualizar(itens: ArrayList<Template>) {
         this.itens.clear()
@@ -34,23 +36,18 @@ class TemplateAdapter(val fragmento: Fragment) :
     inner class Holder(val itemBinding: ItemTemplateBinding) :
         RecyclerView.ViewHolder(itemBinding.root) {
 
-        fun bind(position: Int) {
+        fun bind(position: Int): Any = fragmento.lifecycleScope.launch(IO) {
 
-            itemBinding.tvNome.text = itens[position].nome
+            val template = itens[position]
+            val instancias = RoomDb.getInstancia().instanciaDao().contarInstancias(template.uid)
 
-            fragmento.lifecycleScope.launch(IO) {
-
-                val instancias = RoomDb.getInstancia().instanciaDao().contarInstancias()
-
-                withContext(Main) {
-                    itemBinding.tvQuantidade.text = String.format(
-                        fragmento.getString(R.string.X_objetos_registrados),
-                        instancias.size
-                    )
-                }
-
+            withContext(Main) {
+                itemBinding.tvNome.text = template.nome
+                itemBinding.tvQuantidade.text = String.format(
+                    fragmento.getString(R.string.X_objetos_registrados),
+                    instancias
+                )
             }
-
         }
 
 

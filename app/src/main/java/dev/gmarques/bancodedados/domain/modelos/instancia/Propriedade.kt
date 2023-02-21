@@ -18,7 +18,7 @@ class Propriedade():java.io.Serializable{
     lateinit var tipoCampo: TipoCampo
 
     var valorString: String = ""
-    var valorDouble = 0
+    var valorDouble = 0.0
     var valorBoolean = false
 
 }

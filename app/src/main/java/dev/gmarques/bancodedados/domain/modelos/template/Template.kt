@@ -4,6 +4,9 @@ import java.util.*
 
 class Template(var nome: String) : java.io.Serializable {
     val uid: String = UUID.randomUUID().toString()
-    val entradas = ArrayList<Entrada>()
+
+    val campos = ArrayList<Campo>()
+
+
 }
 

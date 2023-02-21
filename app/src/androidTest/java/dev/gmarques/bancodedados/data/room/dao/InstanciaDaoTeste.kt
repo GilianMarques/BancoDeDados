@@ -1,15 +1,15 @@
-package dev.gmarques.bancodedados.data.room
+package dev.gmarques.bancodedados.data.room.dao
 
 import android.util.Log
 import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import dev.gmarques.bancodedados.data.Mapeador
-import dev.gmarques.bancodedados.data.room.dao.PropriedadeDao
-import dev.gmarques.bancodedados.data.room.dao.InstanciaDao
+import dev.gmarques.bancodedados.data.room.RoomDb
 import dev.gmarques.bancodedados.domain.modelos.TipoCampo
 import dev.gmarques.bancodedados.domain.modelos.instancia.Propriedade
 import dev.gmarques.bancodedados.domain.modelos.instancia.Instancia
+import dev.gmarques.bancodedados.domain.modelos.template.Template
 import junit.framework.TestCase
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -35,16 +35,17 @@ class InstanciaDaoTest : TestCase() {
         db = Room.inMemoryDatabaseBuilder(appContext, RoomDb::class.java).build()
 
         instanciaDao = db.instanciaDao()
-        campoDao = db.campoDao()
+        campoDao = db.propriedadeDao()
     }
 
     @Test
-    fun addOuAtualizarInstanciaComCampos() = runBlocking {
+    fun getInstanciasComCampos() = runBlocking {
 
-        val mInstancia = Instancia().apply { this.templateUid = "templateUid_123" }
+        val mInstancia = Instancia("").apply { this.templateUid = "templateUid_123" }
         val mInstanciaEntidade = Mapeador.getInstanciaEntidade(mInstancia)
 
-        val mCampoDouble = Propriedade(mInstancia.uid, TipoCampo.NUMERO).apply { valorDouble = 999 }
+        val mCampoDouble =
+            Propriedade(mInstancia.uid, TipoCampo.NUMERO).apply { valorDouble = 999.0 }
         val mDoubleEntidade = Mapeador.getPropriedadeEntidade(mCampoDouble)
 
         val mCampoBoolean =
@@ -60,6 +61,35 @@ class InstanciaDaoTest : TestCase() {
 
         assertTrue(instanciasComCampos.size == 1)
         assertTrue(instanciasComCampos[0].propriedades.size == 2)
+
+    }
+
+    @Test
+    fun contarInstancias() = runBlocking {
+
+        val template1 = Template("teste_template")
+        val template2 = Template("teste_template_2")
+
+        val instancia1 = Instancia(template1.uid)
+        val instancia2 = Instancia(template1.uid)
+        val instancia3 = Instancia(template1.uid)
+
+        val instancia4 = Instancia(template2.uid)
+        val instancia5 = Instancia(template2.uid)
+
+        instanciaDao.addOuAtualizar(Mapeador.getInstanciaEntidade(instancia1))
+        instanciaDao.addOuAtualizar(Mapeador.getInstanciaEntidade(instancia2))
+        instanciaDao.addOuAtualizar(Mapeador.getInstanciaEntidade(instancia3))
+
+        instanciaDao.addOuAtualizar(Mapeador.getInstanciaEntidade(instancia4))
+        instanciaDao.addOuAtualizar(Mapeador.getInstanciaEntidade(instancia5))
+
+
+        val contagem1 = instanciaDao.contarInstancias(template1.uid)
+        assertTrue(contagem1 == 3)
+
+        val contagem2 = instanciaDao.contarInstancias(template2.uid)
+        assertTrue(contagem2 == 2)
 
     }
 

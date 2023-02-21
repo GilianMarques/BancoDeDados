@@ -13,10 +13,8 @@ abstract class InstanciaDao : BaseDao<InstanciaEntidade>() {
     @Query("SELECT * FROM instancias WHERE template_uid LIKE :templateUid")
     suspend abstract fun getInstanciasComCampos(templateUid: String): List<InstanciaComPropriedades>
 
-    // https://www.geeksforgeeks.org/sql-using-group-by-to-count-the-number-of-rows-for-each-unique-entry-in-a-column/
-    @Query("SELECT template_uid,COUNT(*) as COUNT from instancias GROUP BY template_uid")
-    suspend abstract fun contarInstancias(): List<Contagem>
 
-    // TODO: testar função que usa essa classe
-    data class Contagem(val template_uid: String, val COUNT: Int)
+    @Query("SELECT COUNT(*) from instancias WHERE template_uid LIKE :templateUid")
+     suspend abstract fun contarInstancias(templateUid: String): Int
+
 }

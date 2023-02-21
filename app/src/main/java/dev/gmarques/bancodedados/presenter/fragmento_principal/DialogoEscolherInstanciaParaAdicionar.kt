@@ -53,7 +53,7 @@ class DialogoEscolherInstanciaParaAdicionar(
 
     private fun criarContainerParaAsViewsDeInstancia() = LinearLayout(fragmento.requireContext())
         .apply {
-            setPadding(16)
+            setPadding(16, 48, 16, 16)
             orientation = LinearLayout.VERTICAL
         }
 }

@@ -4,11 +4,10 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import dev.gmarques.bancodedados.domain.modelos.TipoCampo
-import dev.gmarques.bancodedados.domain.modelos.template.Entrada
 import java.util.*
 
-@Entity(tableName = "entradas")
-class EntradaEntidade {
+@Entity(tableName = "campos")
+class CampoEntidade {
 
     @ColumnInfo(name = "uid")
     @PrimaryKey
