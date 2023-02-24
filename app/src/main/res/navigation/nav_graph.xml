@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FragmentoPrincipal">
+    app:startDestination="@id/FragPrincipal">
 
     <fragment
-        android:id="@+id/FragmentoPrincipal"
-        android:name="dev.gmarques.bancodedados.presenter.fragmento_principal.FragmentoPrincipal"
+        android:id="@+id/FragPrincipal"
+        android:name="dev.gmarques.bancodedados.presenter.fragmento_principal.FragPrincipal"
         android:label="@string/Colecoes"
         tools:layout="@layout/frag_principal">
 
@@ -15,17 +15,49 @@
             android:id="@+id/actionAddInstancia"
             app:destination="@id/FragmentoAddInstancia" />
 
+        <action
+            android:id="@+id/actionAddTemplate"
+            app:destination="@id/FragAddTemplate" />
+
     </fragment>
 
     <fragment
         android:id="@+id/FragmentoAddInstancia"
-        android:name="dev.gmarques.bancodedados.FragmentoAddInstancia"
+        android:name="dev.gmarques.bancodedados.presenter.fragmento_add_instancia.FragAddInstancia"
         android:label=""
         tools:layout="@layout/frag_add_instancia">
 
         <action
             android:id="@+id/action_FragmentoAddInstancia_to_FragmentoPrincipal"
-            app:destination="@id/FragmentoPrincipal" />
+            app:destination="@id/FragPrincipal" />
+
+        <argument
+            android:name="template"
+            app:argType="dev.gmarques.bancodedados.domain.modelos.template.Template" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/FragAddTemplate"
+        android:name="dev.gmarques.bancodedados.presenter.fragmento_add_template.FragAddTemplate"
+        android:label="@string/Novo_template"
+        tools:layout="@layout/frag_add_template">
+
+        <action
+            android:id="@+id/actionFragPrincipal"
+            app:destination="@id/FragPrincipal" />
+
+        <action
+            android:id="@+id/actionAddCampo"
+            app:destination="@id/fragAddCampo" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragAddCampo"
+        android:name="dev.gmarques.bancodedados.presenter.fragmento_add_campo.FragAddCampo"
+        android:label="@string/Novo_campo"
+        tools:layout="@layout/frag_add_campo">
 
         <argument
             android:name="template"

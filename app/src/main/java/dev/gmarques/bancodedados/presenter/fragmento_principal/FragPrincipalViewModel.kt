@@ -9,7 +9,7 @@ import dev.gmarques.bancodedados.data.repositorios.TemplatesRepo
 import dev.gmarques.bancodedados.domain.modelos.template.Template
 import kotlinx.coroutines.launch
 
-class FragmentoPrincipalViewModel : ViewModel() {
+class FragPrincipalViewModel : ViewModel() {
 
 
     private val mutableTemplates = MutableLiveData<ArrayList<Template>>()

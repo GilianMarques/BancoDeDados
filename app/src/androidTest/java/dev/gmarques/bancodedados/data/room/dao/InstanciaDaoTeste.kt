@@ -49,7 +49,7 @@ class InstanciaDaoTest : TestCase() {
         val mDoubleEntidade = Mapeador.getPropriedadeEntidade(mCampoDouble)
 
         val mCampoBoolean =
-            Propriedade(mInstancia.uid, TipoCampo.REAL).apply { valorBoolean = true }
+            Propriedade(mInstancia.uid, TipoCampo.BOOLEANO).apply { valorBoolean = true }
         val mBooleanEntidade = Mapeador.getPropriedadeEntidade(mCampoBoolean)
 
         campoDao.addOuAtualizar(mDoubleEntidade)

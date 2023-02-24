@@ -1,4 +1,4 @@
-package dev.gmarques.bancodedados.presenter
+package dev.gmarques.bancodedados.presenter.fragmento_add_instancia
 
 import android.view.View
 import android.view.View.GONE
@@ -17,7 +17,7 @@ import dev.gmarques.bancodedados.domain.modelos.template.Template
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.withContext
 
-class FragmentoAddInstanciaViewModel : ViewModel() {
+class FragAddInstanciaViewModel : ViewModel() {
     lateinit var template: Template
 
     fun validarEntradas(views: ArrayList<ViewBinding>): Boolean {
@@ -90,7 +90,7 @@ class FragmentoAddInstanciaViewModel : ViewModel() {
                     (viewBinding as InstanciaCampoTextoBinding).edtEntrada.text.toString()
             }
 
-            TipoCampo.REAL -> {
+            TipoCampo.BOOLEANO -> {
                 propriedade.valorBoolean =
                     (viewBinding as InstanciaCampoBooleanoBinding).swEntrada.isChecked
             }

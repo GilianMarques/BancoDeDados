@@ -1,4 +1,4 @@
-package dev.gmarques.bancodedados
+package dev.gmarques.bancodedados.presenter.fragmento_add_instancia
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,21 +12,21 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.snackbar.Snackbar
+import dev.gmarques.bancodedados.R
 import dev.gmarques.bancodedados.databinding.FragAddInstanciaBinding
 import dev.gmarques.bancodedados.databinding.InstanciaCampoBooleanoBinding
 import dev.gmarques.bancodedados.databinding.InstanciaCampoNumericoBinding
 import dev.gmarques.bancodedados.databinding.InstanciaCampoTextoBinding
 import dev.gmarques.bancodedados.domain.modelos.TipoCampo
 import dev.gmarques.bancodedados.domain.modelos.template.*
-import dev.gmarques.bancodedados.presenter.FragmentoAddInstanciaViewModel
 import kotlinx.coroutines.launch
 
-class FragmentoAddInstancia : Fragment() {
+class FragAddInstancia : Fragment() {
 
     private lateinit var binding: FragAddInstanciaBinding
-    private lateinit var viewModel: FragmentoAddInstanciaViewModel
+    private lateinit var viewModel: FragAddInstanciaViewModel
 
-    private val args: FragmentoAddInstanciaArgs by navArgs()
+    private val args: FragAddInstanciaArgs by navArgs()
     private val views = ArrayList<ViewBinding>()
 
     override fun onCreateView(
@@ -34,7 +34,7 @@ class FragmentoAddInstancia : Fragment() {
         savedInstanceState: Bundle?,
     ): View {
 
-        viewModel = ViewModelProvider(this).get(FragmentoAddInstanciaViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(FragAddInstanciaViewModel::class.java)
         binding = FragAddInstanciaBinding.inflate(inflater, container, false)
         return binding.root
 
@@ -58,9 +58,8 @@ class FragmentoAddInstancia : Fragment() {
             lifecycleScope.launch {
                 if (viewModel.validarEntradas(views)) {
                     viewModel.salvarObjeto(views)
-                    this@FragmentoAddInstancia.findNavController().navigateUp()
-                }
-                else notificar(getString(R.string.Verifique_os_valores_inseridos_e_tente_novamente))
+                    this@FragAddInstancia.findNavController().navigateUp()
+                } else notificar(getString(R.string.Verifique_os_valores_inseridos_e_tente_novamente))
             }
         }
     }
@@ -74,11 +73,11 @@ class FragmentoAddInstancia : Fragment() {
     }
 
     private fun carregarUi() {
-        viewModel.template.campos.forEach { entrada ->
+        viewModel.template.getCampos().forEach { entrada ->
             when (entrada.tipoCampo) {
                 TipoCampo.NUMERO -> criarCampoNumerico(entrada)
                 TipoCampo.TEXTO -> criarCampoDeTexto(entrada)
-                TipoCampo.REAL -> criarCampoBooleano(entrada)
+                TipoCampo.BOOLEANO -> criarCampoBooleano(entrada)
             }
         }
 
@@ -114,15 +113,15 @@ class FragmentoAddInstancia : Fragment() {
         val regras = StringBuilder()
         regras.appendLine(getString(R.string.O_campo_deve))
 
-        if (campo.podeSerVazio == PODE_SER_VAZIO) regras.appendLine(getString(R.string.Ter_algum_conteudo))
+        if (campo.podeSerVazio == PODE_SER_VAZIO_PADRAO) regras.appendLine(getString(R.string.Ter_algum_conteudo))
 
         val regrasDeCampoNumerico = {
-            if (campo.maiorQue != MAIOR_QUE) regras.appendLine(
+            if (campo.maiorQue != MAIOR_QUE_PADRAO) regras.appendLine(
                 String.format(
                     getString(R.string.Ser_maior_que_x), campo.maiorQue
                 )
             )
-            if (campo.menorQue != MENOR_QUE) regras.appendLine(
+            if (campo.menorQue != MENOR_QUE_PADRAO) regras.appendLine(
                 String.format(
                     getString(R.string.Ser_menor_que_x), campo.menorQue
                 )
@@ -131,12 +130,12 @@ class FragmentoAddInstancia : Fragment() {
 
         val regrasDeCampoDeTexto = {
             {
-                if (campo.comprimentoMaximo != COMPRIMENTO_MAXIMO) regras.appendLine(
+                if (campo.comprimentoMaximo != COMPRIMENTO_MAXIMO_PADRAO) regras.appendLine(
                     String.format(
                         getString(R.string.Ter_comprimento_menor_que_x), campo.comprimentoMaximo
                     )
                 )
-                if (campo.comprimentoMinimo != COMPRIMENTO_MINIMO) regras.appendLine(
+                if (campo.comprimentoMinimo != COMPRIMENTO_MINIMO_PADRAO) regras.appendLine(
                     String.format(
                         getString(R.string.Ter_comprimento_maior_que_x), campo.comprimentoMinimo
                     )
@@ -147,7 +146,7 @@ class FragmentoAddInstancia : Fragment() {
         when (campo.tipoCampo) {
             TipoCampo.NUMERO -> regrasDeCampoNumerico()
             TipoCampo.TEXTO -> regrasDeCampoDeTexto()
-            TipoCampo.REAL -> {}
+            TipoCampo.BOOLEANO -> {}
         }
 
         return regras.toString()

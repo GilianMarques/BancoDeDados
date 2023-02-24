@@ -15,5 +15,24 @@
     <string name="Ter_comprimento_maior_que_x">• Ter comprimento de até %1$s caracteres</string>
     <string name="Ter_comprimento_menor_que_x">• Ter comprimento de pelo menos %1$s caracteres</string>
     <string name="O_campo_deve">O campo deve:</string>
+    <string name="Novo_template">Novo template</string>
+    <string name="Nome">Nome</string>
+    <string name="Texto">Texto</string>
+    <string name="Numero">Número</string>
+    <string name="Switch">Switch</string>
+    <string name="Novo_campo">Novo campo</string>
+    <string name="Regras">Regras</string>
+    <string name="Comprimento_maximo">Comprimento máximo</string>
+    <string name="caracteres">caracteres</string>
+    <string name="Comprimento_minimo">Comprimento mínimo</string>
+    <string name="Menor_que">Menor que</string>
+    <string name="Maior_que">Maior que</string>
+    <string name="Pode_ficar_vazio">Pode ficar vazio</string>
+    <string name="Tipo">Tipo</string>
+    <string name="Concluir">Concluir</string>
+    <string name="Entrada_invalida_para_regras_de_texto">Entrada inválida para as regras do campo de texto</string>
+    <string name="Entrada_invalida_para_regras_de_numero">Entrada inválida para as regras do campo de número</string>
+    <string name="Nome_invalido">Nome inválido</string>
+    <string name="Campos">Campos</string>
 
 </resources>

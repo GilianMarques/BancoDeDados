@@ -20,7 +20,7 @@ class MapeadorTest : TestCase() {
         /*O teste passa se  não houver excepions*/
 
         val instancia = Instancia("template_uid_123")
-        val propriedade = Propriedade(instancia.uid, TipoCampo.REAL).apply { nome = "propriedade de teste 1" }
+        val propriedade = Propriedade(instancia.uid, TipoCampo.BOOLEANO).apply { nome = "propriedade de teste 1" }
         instancia.propriedades.add(propriedade)
 
         val entidade = Mapeador.getInstanciaEntidade(instancia)
@@ -36,8 +36,8 @@ class MapeadorTest : TestCase() {
         /*O teste passa se  não houver excepions*/
 
         val template = Template("Teste template")
-        val campo = Campo(template.uid, TipoCampo.REAL).apply { nome = "campo de teste 1" }
-        template.campos.add(campo)
+        val campo = Campo(template.uid, TipoCampo.BOOLEANO).apply { nome = "campo de teste 1" }
+        template.addCampo(campo)
 
         val entidade = Mapeador.getTemplateEntidade(template)
 

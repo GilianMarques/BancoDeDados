@@ -42,7 +42,7 @@ class App : Application() {
                 nome = "Genero"
                 comprimentoMaximo = 30
             }
-            val jaJogado = Campo(jogos.uid, TipoCampo.REAL).apply {
+            val jaJogado = Campo(jogos.uid, TipoCampo.BOOLEANO).apply {
                 nome = "Jogado"
             }
 

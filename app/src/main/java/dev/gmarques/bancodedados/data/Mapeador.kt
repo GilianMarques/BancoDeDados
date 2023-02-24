@@ -15,6 +15,7 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 
+// TODO: empacotar e testar o jackson
 // TODO: testar as funçoes conforme forem entrando em uso 
 object Mapeador {
     // https://stackabuse.com/reading-and-writing-json-in-kotlin-with-jackson/
@@ -55,7 +56,7 @@ object Mapeador {
 
             val entradaEntidadeString: String = jackson.writeValueAsString(it)
             val campo: Campo = jackson.readValue(entradaEntidadeString)
-            template.campos.add(campo)
+            template.addCampo(campo)
 
         }
         return@withContext template

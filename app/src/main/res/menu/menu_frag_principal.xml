@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="dev.gmarques.bancodedados.MainActivity">
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="Configurações"
+        android:id="@+id/novo_template"
+        android:title="@string/Novo_template"
         app:showAsAction="never" />
 </menu>
