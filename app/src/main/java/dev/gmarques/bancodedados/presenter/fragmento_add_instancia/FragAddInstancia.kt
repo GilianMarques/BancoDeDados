@@ -61,6 +61,7 @@ class FragAddInstancia : Fragment() {
 
             binding.root.clearFocus()
 
+            // TODO: deve chamar a validaçao e essa deve notificar a ui via livedata
             lifecycleScope.launch {
                 if (viewModel.validarEntradas(views)) {
                     viewModel.salvarObjeto(views)

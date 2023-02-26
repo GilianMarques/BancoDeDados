@@ -2,7 +2,9 @@ package dev.gmarques.bancodedados.domain.modelos.instancia
 
 import java.util.*
 
-class Instancia(var templateUid: String) :java.io.Serializable{
+class Instancia : java.io.Serializable {
+
+    lateinit var templateUid: String
 
     val uid: String = UUID.randomUUID().toString()
 

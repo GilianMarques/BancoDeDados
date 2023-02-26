@@ -14,6 +14,7 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import dev.gmarques.bancodedados.databinding.FragAddCampoBinding
+
 @AndroidEntryPoint
 class FragAddCampo : Fragment() {
 
@@ -139,8 +140,8 @@ class FragAddCampo : Fragment() {
 
 
     companion object {
-        val ID_RESULTADO: String = "campo"
-        val CHAVE_RESULTADO: String = "novo_campo_criado"
+        const val ID_RESULTADO: String = "campo"
+        const val CHAVE_RESULTADO: String = "novo_campo_criado"
     }
 
 }

@@ -2,24 +2,26 @@ package dev.gmarques.bancodedados.presenter.fragmento_add_template
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import dev.gmarques.bancodedados.databinding.FragAddTemplateBinding
 import dev.gmarques.bancodedados.databinding.TemplateRemoverCampoBinding
 import dev.gmarques.bancodedados.domain.Nomes
 import dev.gmarques.bancodedados.domain.modelos.template.Campo
 import dev.gmarques.bancodedados.presenter.fragmento_add_campo.FragAddCampo
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class FragAddTemplate : Fragment() {
-
 
     private lateinit var binding: FragAddTemplateBinding
     private val viewModel: FragAddTemplateViewModel by viewModels()
@@ -37,7 +39,24 @@ class FragAddTemplate : Fragment() {
         initListenerDoFragmentoAddCampo()
         exibirViewsDosCampos(viewModel.template.getCampos())
         initFabConcluir()
+        observarMensagensDeErro()
+        observarFecharApp()
 
+    }
+
+    private fun observarMensagensDeErro() {
+        viewModel.mensagensDeErroLiveData.observe(viewLifecycleOwner) {
+            it?.let {
+                Snackbar.make(binding.fabAddCampo, it, Snackbar.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    private fun observarFecharApp() {
+        viewModel.fecharFrag.observe(viewLifecycleOwner) {
+            if (it) definirResultadoESair()
+
+        }
     }
 
     private fun initEdtNome() {
@@ -46,16 +65,29 @@ class FragAddTemplate : Fragment() {
             binding.edtNome.requestFocus()
         }
 
-        binding.edtNome.setOnFocusChangeListener { view: View, b: Boolean ->
+        binding.edtNome.setOnFocusChangeListener { _: View, b: Boolean ->
             if (!b) binding.edtNome.setText(Nomes.adequarNome(binding.edtNome.text.toString()))
         }
     }
 
     private fun initFabConcluir() {
-        binding.fabAddTemplate.setOnClickListener {
-            // TODO: validar entradas do usuario e salvar template
+        binding.fabConcluir.setOnClickListener {
+            lifecycleScope.launch {
+                if (viewModel.template.getCampos().isEmpty()) return@launch
+
+                viewModel.preencherTemplate(binding)
+
+                if (viewModel.validarTemplate()) viewModel.salvarTemplate()
+
+            }
         }
 
+
+    }
+
+    private fun definirResultadoESair() {
+        setFragmentResult(CHAVE_RESULTADO, Bundle())
+        findNavController().navigateUp()
     }
 
     private fun initListenerDoFragmentoAddCampo() {
@@ -106,9 +138,21 @@ class FragAddTemplate : Fragment() {
             vBinding.ivRemover.setOnClickListener {
                 viewModel.template.removerCampo(campo)
                 binding.container.removeView(vBinding.root)
+                alternarVisibilidadeBotaoConcluir()
             }
             binding.container.addView(vBinding.root)
         }
+        alternarVisibilidadeBotaoConcluir()
     }
 
+    private fun alternarVisibilidadeBotaoConcluir() {
+
+        binding.fabConcluir.visibility =
+                if (binding.container.childCount > 0) View.VISIBLE else View.GONE
+
+    }
+
+    companion object {
+        const val CHAVE_RESULTADO: String = "novo_template_criado"
+    }
 }

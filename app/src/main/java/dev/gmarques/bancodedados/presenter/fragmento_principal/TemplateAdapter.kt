@@ -16,13 +16,16 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class TemplateAdapter(val fragmento: Fragment, private val instanciasRepo: InstanciaRepo) :
+class TemplateAdapter(
+    private val fragmento: Fragment,
+    private val instanciasRepo: InstanciaRepo,
+) :
     RecyclerView.Adapter<TemplateAdapter.Holder>() {
 
     val itens = ArrayList<Template>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        Holder(ItemTemplateBinding.inflate(fragmento.layoutInflater, parent, false))
+            Holder(ItemTemplateBinding.inflate(fragmento.layoutInflater, parent, false))
 
     override fun getItemCount() = itens.size
 

@@ -40,7 +40,7 @@ class MapeadorTest : TestCase() {
 
         /*O teste passa se  não houver excepions*/
 
-        val template = Template("Teste template")
+        val template = Template().apply { nome="Teste template" }
         val campo = Campo(template.uid, TipoCampo.BOOLEANO).apply { nome = "campo de teste 1" }
         template.addCampo(campo)
 

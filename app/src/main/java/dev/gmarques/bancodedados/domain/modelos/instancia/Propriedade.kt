@@ -6,8 +6,7 @@ import java.util.*
 
 class Propriedade():java.io.Serializable{
 
-    constructor(instanciaUid: String, tipo: TipoCampo) : this() {
-        this.instanciaUid = instanciaUid
+    constructor( tipo: TipoCampo) : this() {
         this.tipoCampo = tipo
     }
 

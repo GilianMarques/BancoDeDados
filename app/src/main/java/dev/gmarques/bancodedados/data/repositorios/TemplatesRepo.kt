@@ -1,8 +1,8 @@
 package dev.gmarques.bancodedados.data.repositorios
 
 import dev.gmarques.bancodedados.data.Mapeador
-import dev.gmarques.bancodedados.data.room.RoomDataBase
 import dev.gmarques.bancodedados.data.room.dao.TemplateDao
+import dev.gmarques.bancodedados.data.room.entidades.relacoes.TemplateComCampos
 import dev.gmarques.bancodedados.domain.modelos.template.Template
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.withContext
@@ -17,13 +17,14 @@ class TemplatesRepo @Inject constructor(
 
 
     suspend fun carregarTemplates(): ArrayList<Template> = withContext(IO) {
-        val templates = ArrayList<Template>()
-        templateDao.getTodosOsTemplates()
-            .forEach {
-                templates.add(mapeador.getTemplate(it))
-            }
+        return@withContext templateDao
+            .getTodosOsTemplates()
+            .map<TemplateComCampos, Template> { mapeador.getTemplate(it) }
+    } as ArrayList<Template>
 
-        return@withContext templates
+    suspend fun addOuAtualizar(template: Template) {
+        val templateEntidade = mapeador.getTemplateEntidade(template)
+        templateDao.addOuAtualizar(templateEntidade)
     }
 
 }

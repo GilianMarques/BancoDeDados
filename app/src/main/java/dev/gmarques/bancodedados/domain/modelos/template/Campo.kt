@@ -4,7 +4,7 @@ import dev.gmarques.bancodedados.domain.Nomes
 import dev.gmarques.bancodedados.domain.modelos.TipoCampo
 import java.util.*
 
-class Campo(@Suppress("unused") val templateUid: String, var tipoCampo: TipoCampo) :
+class Campo(var tipoCampo: TipoCampo) :
     java.io.Serializable {
 
     val uid: String = UUID.randomUUID().toString()
@@ -12,6 +12,8 @@ class Campo(@Suppress("unused") val templateUid: String, var tipoCampo: TipoCamp
         set(value) {
             field = Nomes.adequarNome(value)
         }
+    lateinit var templateUid: String
+
     var podeSerVazio = PODE_SER_VAZIO_PADRAO
     var comprimentoMaximo = COMPRIMENTO_MAXIMO_PADRAO
     var comprimentoMinimo = COMPRIMENTO_MINIMO_PADRAO
@@ -34,9 +36,9 @@ class Campo(@Suppress("unused") val templateUid: String, var tipoCampo: TipoCamp
      * Valida o valor que o usuario esta tentando inserir no campo
      * */
     fun validarEntradaDeTexto(entradaUsuario: String?): Boolean {
-
-        if (entradaUsuario == null || entradaUsuario.isEmpty()) {
-            if (!podeSerVazio) return false
+// TODO: verificar erro de validaçao desse campo e rever testes
+        if (entradaUsuario == null || entradaUsuario.isEmpty() || entradaUsuario.isBlank()) {
+            return podeSerVazio
         } else {
 
             if (entradaUsuario.length > comprimentoMaximo) return false
@@ -55,11 +57,11 @@ class Campo(@Suppress("unused") val templateUid: String, var tipoCampo: TipoCamp
         const val MAIOR_VALOR_PERMITIDO = 999_999_999
 
         // valores padrao
-        val PODE_SER_VAZIO_PADRAO = false
-        val COMPRIMENTO_MAXIMO_PADRAO = 150
-        val COMPRIMENTO_MINIMO_PADRAO = 0
-        val MAIOR_QUE_PADRAO = -999_999
-        val MENOR_QUE_PADRAO = 999_999
+        const val PODE_SER_VAZIO_PADRAO = false
+        const val COMPRIMENTO_MAXIMO_PADRAO = 150
+        const val COMPRIMENTO_MINIMO_PADRAO = 0
+        const val MAIOR_QUE_PADRAO = -999_999
+        const val MENOR_QUE_PADRAO = 999_999
 
         /**
          * Valida o nome do campo

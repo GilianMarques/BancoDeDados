@@ -29,18 +29,18 @@ class FragAddCampoViewModel @Inject constructor() : ViewModel() {
         }
 
     fun validarRegrasNumero(maiorQue: Int?, menorQue: Int?) =
-        Campo.validarRegrasNumero(maiorQue, menorQue)
-            .also {
-                if (!it) _erroDeEntrada.value = R.string.Entrada_invalida_para_regras_de_numero
-            }
+            Campo.validarRegrasNumero(maiorQue, menorQue)
+                .also {
+                    if (!it) _erroDeEntrada.value = R.string.Entrada_invalida_para_regras_de_numero
+                }
 
     fun validarRegrasTexto(compMaximo: Int?, compMinimo: Int?) =
-        Campo.validarRegrasTexto(compMaximo, compMinimo)
-            .also {
-            if (!it) _erroDeEntrada.value = R.string.Entrada_invalida_para_regras_de_texto
-        }
+            Campo.validarRegrasTexto(compMaximo, compMinimo)
+                .also {
+                    if (!it) _erroDeEntrada.value = R.string.Entrada_invalida_para_regras_de_texto
+                }
 
-    fun criarObjetoCampo(binding: FragAddCampoBinding) = Campo(template.uid, inferirTipo(binding))
+    fun criarObjetoCampo(binding: FragAddCampoBinding) = Campo(inferirTipo(binding))
         .apply {
             nome = binding.edtNome.text!!.toString()
 

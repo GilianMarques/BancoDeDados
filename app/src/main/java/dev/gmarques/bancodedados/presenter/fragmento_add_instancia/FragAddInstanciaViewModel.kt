@@ -30,8 +30,8 @@ class FragAddInstanciaViewModel @Inject constructor(
     fun validarEntradas(views: ArrayList<ViewBinding>): Boolean {
         views.forEach {
             when (it) {
-                is InstanciaCampoNumericoBinding -> if (!validarCampoNumerico(it)) return false
-                is InstanciaCampoTextoBinding -> if (!validarCampoDeTexto(it)) return false
+                is InstanciaCampoNumericoBinding -> validarCampoNumerico(it)
+                is InstanciaCampoTextoBinding -> validarCampoDeTexto(it)
             }
         }
 
@@ -70,16 +70,16 @@ class FragAddInstanciaViewModel @Inject constructor(
 
     suspend fun salvarObjeto(views: ArrayList<ViewBinding>) = withContext(IO) {
 
-        val instancia = Instancia(template.uid)
-        instanciaRepo.addInstancia(instancia)
+        val instancia = Instancia()
+        instanciaRepo.addInstancia(instancia, template)
 
         views.forEach { viewBinding ->
 
             val campo = viewBinding.root.tag as Campo
-            val propriedade = Propriedade(instancia.uid, campo.tipoCampo)
+            val propriedade = Propriedade(campo.tipoCampo)
             atribuiValor(campo, propriedade, viewBinding)
 
-            propriedadeRepo.addPropriedade(propriedade)
+            propriedadeRepo.addPropriedade(propriedade, instancia)
         }
     }
 
@@ -88,18 +88,18 @@ class FragAddInstanciaViewModel @Inject constructor(
 
             TipoCampo.NUMERO -> {
                 propriedade.valorDouble =
-                    (viewBinding as InstanciaCampoNumericoBinding).edtEntrada.text.toString()
-                        .toDoubleOrNull() ?: 0.0
+                        (viewBinding as InstanciaCampoNumericoBinding).edtEntrada.text.toString()
+                            .toDoubleOrNull() ?: 0.0
             }
 
             TipoCampo.TEXTO -> {
                 propriedade.valorString =
-                    (viewBinding as InstanciaCampoTextoBinding).edtEntrada.text.toString()
+                        (viewBinding as InstanciaCampoTextoBinding).edtEntrada.text.toString()
             }
 
             TipoCampo.BOOLEANO -> {
                 propriedade.valorBoolean =
-                    (viewBinding as InstanciaCampoBooleanoBinding).swEntrada.isChecked
+                        (viewBinding as InstanciaCampoBooleanoBinding).swEntrada.isChecked
             }
         }
     }

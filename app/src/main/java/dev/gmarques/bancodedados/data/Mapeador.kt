@@ -1,6 +1,6 @@
 package dev.gmarques.bancodedados.data
 
-import dev.gmarques.bancodedados.data.json_serializador.JsonSerializador
+import dev.gmarques.bancodedados.domain._interfaces.JsonSerializador
 import dev.gmarques.bancodedados.data.room.entidades.CampoEntidade
 import dev.gmarques.bancodedados.data.room.entidades.InstanciaEntidade
 import dev.gmarques.bancodedados.data.room.entidades.PropriedadeEntidade
@@ -47,7 +47,7 @@ class Mapeador @Inject constructor(val jsonSerializador: JsonSerializador) {
         jsonSerializador.fromJson(jsonString, TemplateEntidade::class.java)
     }
 
-    suspend fun getEntradaEntidade(mCampo: Campo): CampoEntidade = withContext(IO) {
+    suspend fun getCampoEntidade(mCampo: Campo): CampoEntidade = withContext(IO) {
         jsonSerializador.fromJson(jsonSerializador.toJSon(mCampo), CampoEntidade::class.java)
     }
 

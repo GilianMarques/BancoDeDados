@@ -34,5 +34,6 @@
     <string name="Entrada_invalida_para_regras_de_numero">Entrada inválida para as regras do campo de número</string>
     <string name="Nome_invalido">Nome inválido</string>
     <string name="Campos">Campos</string>
+    <string name="Verifique_o_nome_do_template_e_tente_novamente">Verifique o nome do template e tente novamente</string>
 
 </resources>

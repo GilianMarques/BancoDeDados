@@ -6,19 +6,23 @@ import android.view.*
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.EntryPointAccessors
+import dev.gmarques.bancodedados.App
 import dev.gmarques.bancodedados.R
 import dev.gmarques.bancodedados.data.repositorios.InstanciaRepo
 import dev.gmarques.bancodedados.databinding.FragPrincipalBinding
 import dev.gmarques.bancodedados.domain.modelos.template.Template
-import kotlinx.coroutines.Dispatchers
+import dev.gmarques.bancodedados.presenter.fragmento_add_template.FragAddTemplate
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class FragPrincipal : Fragment(), MenuProvider {
@@ -26,8 +30,6 @@ class FragPrincipal : Fragment(), MenuProvider {
     private lateinit var binding: FragPrincipalBinding
     private val viewModel: FragPrincipalViewModel by viewModels()
 
-    @Inject
-    lateinit var instanciasRepo: InstanciaRepo
 
     private lateinit var adapter: TemplateAdapter
 
@@ -36,12 +38,11 @@ class FragPrincipal : Fragment(), MenuProvider {
         savedInstanceState: Bundle?,
     ): View =
 
-        FragPrincipalBinding.inflate(inflater, container, false).also {
-            binding = it
-        }.let {
-            binding.root
-        }
-
+            FragPrincipalBinding.inflate(inflater, container, false).also {
+                binding = it
+            }.let {
+                binding.root
+            }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -51,6 +52,17 @@ class FragPrincipal : Fragment(), MenuProvider {
         initRecyclerView()
         observarAtualizacoesNosTemplates()
         initMenu()
+        initListenerDoFragmentoAddTemplate()
+    }
+
+    private fun initListenerDoFragmentoAddTemplate() {
+        setFragmentResultListener(FragAddTemplate.CHAVE_RESULTADO) { chave: String, _: Bundle ->
+            if (FragAddTemplate.CHAVE_RESULTADO == chave) {
+                // TODO: atualizar recyclerview e depender de abstraçoes
+                // TODO: O CampoRepo deve receber o template quando for salvar o campo
+                // TODO: app nao ta salvando o template, só os campos
+            }
+        }
     }
 
     private fun initMenu() {
@@ -66,7 +78,11 @@ class FragPrincipal : Fragment(), MenuProvider {
     }
 
     private fun initRecyclerView() {
-        adapter = TemplateAdapter(this@FragPrincipal, instanciasRepo)
+        val instanciaRepo = EntryPointAccessors
+            .fromApplication(App.get.applicationContext, InstanciaRepo.InstanciaRepoEntryPoint::class.java)
+            .getRepoInstancia()
+
+        adapter = TemplateAdapter(this@FragPrincipal, instanciaRepo)
         binding.rvTemplates.layoutManager = LinearLayoutManager(requireContext())
         binding.rvTemplates.adapter = adapter
     }
@@ -82,16 +98,16 @@ class FragPrincipal : Fragment(), MenuProvider {
     }
 
     private fun carregarTemplatesEMostrarDialogoSeMaisDeUm() =
-        lifecycleScope.launch(Dispatchers.IO) {
+            lifecycleScope.launch(IO) {
 
-            val templates = viewModel.getTemplates()
+                val templates = viewModel.getTemplates()
 
-            if (templates.size == 1) abrirFragmentoAdicionarInstancia(templates[0])
-            else withContext(Dispatchers.Main) {
-                DialogoEscolherInstanciaParaAdicionar(templates, this@FragPrincipal)
-                { abrirFragmentoAdicionarInstancia(it) }
+                if (templates.size == 1) abrirFragmentoAdicionarInstancia(templates[0])
+                else withContext(Main) {
+                    DialogoEscolherInstanciaParaAdicionar(templates, this@FragPrincipal)
+                    { abrirFragmentoAdicionarInstancia(it) }
+                }
             }
-        }
 
     private fun abrirFragmentoAdicionarInstancia(template: Template) {
         val action = FragPrincipalDirections.actionAddInstancia(template)

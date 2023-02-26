@@ -1,4 +1,4 @@
-package dev.gmarques.bancodedados.data.json_serializador
+package dev.gmarques.bancodedados.domain._interfaces
 
 interface JsonSerializador {
 

@@ -1,6 +1,7 @@
 package dev.gmarques.bancodedados.data.json_serializador
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import dev.gmarques.bancodedados.domain._interfaces.JsonSerializador
 
 class JacksonJsonSerializador : JsonSerializador {
 

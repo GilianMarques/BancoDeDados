@@ -1,4 +1,4 @@
-package dev.gmarques.bancodedados.data.room
+package dev.gmarques.bancodedados.domain.di
 
 import android.content.Context
 import androidx.room.Room
@@ -7,6 +7,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import dev.gmarques.bancodedados.data.room.RoomDataBase
 import dev.gmarques.bancodedados.data.room.dao.CampoDao
 import dev.gmarques.bancodedados.data.room.dao.InstanciaDao
 import dev.gmarques.bancodedados.data.room.dao.PropriedadeDao

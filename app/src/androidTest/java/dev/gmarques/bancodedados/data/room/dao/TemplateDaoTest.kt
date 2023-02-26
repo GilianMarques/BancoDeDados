@@ -17,7 +17,6 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import javax.inject.Inject
 
 @RunWith(AndroidJUnit4::class)
 class TemplateDaoTest : TestCase() {
@@ -45,7 +44,7 @@ class TemplateDaoTest : TestCase() {
     @Test
     fun getTodosOsTemplates() = runBlocking {
 
-        val template = Template("Musica")
+        val template = Template().apply { nome = "Musica" }
         val campo1 = Campo(template.uid, TipoCampo.TEXTO).apply {
             nome = "Album"
         }
@@ -57,8 +56,8 @@ class TemplateDaoTest : TestCase() {
         }
 
         templateDao.addOuAtualizar(mapeador.getTemplateEntidade(template))
-        entradaUiDao.addOuAtualizar(mapeador.getEntradaEntidade(campo1))
-        entradaUiDao.addOuAtualizar(mapeador.getEntradaEntidade(campo2))
+        entradaUiDao.addOuAtualizar(mapeador.getCampoEntidade(campo1))
+        entradaUiDao.addOuAtualizar(mapeador.getCampoEntidade(campo2))
 
         val templates = templateDao.getTodosOsTemplates()
 

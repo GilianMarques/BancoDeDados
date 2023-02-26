@@ -1,9 +1,11 @@
-package dev.gmarques.bancodedados.data.json_serializador
+package dev.gmarques.bancodedados.domain.di
 
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import dev.gmarques.bancodedados.data.json_serializador.JacksonJsonSerializador
+import dev.gmarques.bancodedados.domain._interfaces.JsonSerializador
 import javax.inject.Singleton
 
 /*

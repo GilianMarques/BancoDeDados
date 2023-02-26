@@ -36,34 +36,38 @@ class App : Application() {
             ) return@runBlocking
 
 
-            val musica = Template().apply { nome="Musica" }
-            val artista = Campo(musica.uid, TipoCampo.TEXTO).apply {
+            val musica = Template().apply { nome = "Musica" }
+            val artista = Campo(TipoCampo.TEXTO).apply {
+                templateUid = musica.uid
                 nome = "Artista"
                 comprimentoMaximo = 30
             }
-            val faixa = Campo(musica.uid, TipoCampo.NUMERO).apply {
+            val faixa = Campo(TipoCampo.NUMERO).apply {
+                templateUid = musica.uid
                 nome = "N° faixa"
                 maiorQue = 0
                 menorQue = 99
             }
 
             templateDao.addOuAtualizar(mapeador.getTemplateEntidade(musica))
-            campoDao.addOuAtualizar(mapeador.getEntradaEntidade(artista))
-            campoDao.addOuAtualizar(mapeador.getEntradaEntidade(faixa))
+            campoDao.addOuAtualizar(mapeador.getCampoEntidade(artista))
+            campoDao.addOuAtualizar(mapeador.getCampoEntidade(faixa))
 
 
-            val jogos = Template().apply { nome="Jogo"}
-            val genero = Campo(jogos.uid, TipoCampo.TEXTO).apply {
+            val jogos = Template().apply { nome = "Jogo" }
+            val genero = Campo(TipoCampo.TEXTO).apply {
                 nome = "Genero"
+                templateUid = jogos.uid
                 comprimentoMaximo = 30
             }
-            val jaJogado = Campo(jogos.uid, TipoCampo.BOOLEANO).apply {
+            val jaJogado = Campo(TipoCampo.BOOLEANO).apply {
                 nome = "Jogado"
+                templateUid = jogos.uid
             }
 
             templateDao.addOuAtualizar(mapeador.getTemplateEntidade(jogos))
-            campoDao.addOuAtualizar(mapeador.getEntradaEntidade(genero))
-            campoDao.addOuAtualizar(mapeador.getEntradaEntidade(jaJogado))
+            campoDao.addOuAtualizar(mapeador.getCampoEntidade(genero))
+            campoDao.addOuAtualizar(mapeador.getCampoEntidade(jaJogado))
 
         }
     }

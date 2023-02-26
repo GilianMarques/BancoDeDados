@@ -72,8 +72,8 @@ class InstanciaDaoTest : TestCase() {
     @Test
     fun contarInstancias() = runBlocking {
 
-        val template1 = Template("teste_template")
-        val template2 = Template("teste_template_2")
+        val template1 = Template().apply { nome="teste_template" }
+        val template2 = Template().apply { nome="teste_template_2" }
 
         val instancia1 = Instancia(template1.uid)
         val instancia2 = Instancia(template1.uid)
