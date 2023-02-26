@@ -1,19 +1,26 @@
 package dev.gmarques.bancodedados.data.repositorios
 
-import android.util.Log
 import dev.gmarques.bancodedados.data.Mapeador
-import dev.gmarques.bancodedados.data.room.RoomDb
+import dev.gmarques.bancodedados.data.room.RoomDataBase
+import dev.gmarques.bancodedados.data.room.dao.TemplateDao
 import dev.gmarques.bancodedados.domain.modelos.template.Template
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
+import javax.inject.Singleton
 
-object TemplatesRepo {
+@Singleton
+class TemplatesRepo @Inject constructor(
+    private val mapeador: Mapeador,
+    private val templateDao: TemplateDao,
+) {
+
 
     suspend fun carregarTemplates(): ArrayList<Template> = withContext(IO) {
         val templates = ArrayList<Template>()
-        RoomDb.getInstancia().templateDao().getTodosOsTemplates()
+        templateDao.getTodosOsTemplates()
             .forEach {
-                templates.add(Mapeador.getTemplate(it))
+                templates.add(mapeador.getTemplate(it))
             }
 
         return@withContext templates

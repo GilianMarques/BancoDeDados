@@ -5,7 +5,8 @@ import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import dev.gmarques.bancodedados.data.Mapeador
-import dev.gmarques.bancodedados.data.room.RoomDb
+import dev.gmarques.bancodedados.data.json_serializador.JacksonJsonSerializador
+import dev.gmarques.bancodedados.data.room.RoomDataBase
 import dev.gmarques.bancodedados.domain.modelos.TipoCampo
 import dev.gmarques.bancodedados.domain.modelos.instancia.Propriedade
 import dev.gmarques.bancodedados.domain.modelos.instancia.Instancia
@@ -19,41 +20,45 @@ import org.junit.runner.RunWith
 
 import org.junit.Assert.*
 import org.junit.Before
+import javax.inject.Inject
 
 @RunWith(AndroidJUnit4::class)
 class InstanciaDaoTest : TestCase() {
 
-    private lateinit var campoDao: PropriedadeDao
-    private lateinit var db: RoomDb
+    // nao devem ser injetados com hilt
+    private lateinit var propriedadeDao: PropriedadeDao
+    private lateinit var db: RoomDataBase
     private lateinit var instanciaDao: InstanciaDao
+
+    val mapeador = Mapeador(JacksonJsonSerializador())
 
     @Before
     public override fun setUp() {
         Log.d("USUK", "TemplateDaoTest.setUp: ")
 
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        db = Room.inMemoryDatabaseBuilder(appContext, RoomDb::class.java).build()
+        db = Room.inMemoryDatabaseBuilder(appContext, RoomDataBase::class.java).build()
 
         instanciaDao = db.instanciaDao()
-        campoDao = db.propriedadeDao()
+        propriedadeDao = db.propriedadeDao()
     }
 
     @Test
     fun getInstanciasComCampos() = runBlocking {
 
         val mInstancia = Instancia("").apply { this.templateUid = "templateUid_123" }
-        val mInstanciaEntidade = Mapeador.getInstanciaEntidade(mInstancia)
+        val mInstanciaEntidade = mapeador.getInstanciaEntidade(mInstancia)
 
         val mCampoDouble =
             Propriedade(mInstancia.uid, TipoCampo.NUMERO).apply { valorDouble = 999.0 }
-        val mDoubleEntidade = Mapeador.getPropriedadeEntidade(mCampoDouble)
+        val mDoubleEntidade = mapeador.getPropriedadeEntidade(mCampoDouble)
 
         val mCampoBoolean =
             Propriedade(mInstancia.uid, TipoCampo.BOOLEANO).apply { valorBoolean = true }
-        val mBooleanEntidade = Mapeador.getPropriedadeEntidade(mCampoBoolean)
+        val mBooleanEntidade = mapeador.getPropriedadeEntidade(mCampoBoolean)
 
-        campoDao.addOuAtualizar(mDoubleEntidade)
-        campoDao.addOuAtualizar(mBooleanEntidade)
+        propriedadeDao.addOuAtualizar(mDoubleEntidade)
+        propriedadeDao.addOuAtualizar(mBooleanEntidade)
 
         instanciaDao.addOuAtualizar(mInstanciaEntidade)
 
@@ -77,12 +82,12 @@ class InstanciaDaoTest : TestCase() {
         val instancia4 = Instancia(template2.uid)
         val instancia5 = Instancia(template2.uid)
 
-        instanciaDao.addOuAtualizar(Mapeador.getInstanciaEntidade(instancia1))
-        instanciaDao.addOuAtualizar(Mapeador.getInstanciaEntidade(instancia2))
-        instanciaDao.addOuAtualizar(Mapeador.getInstanciaEntidade(instancia3))
+        instanciaDao.addOuAtualizar(mapeador.getInstanciaEntidade(instancia1))
+        instanciaDao.addOuAtualizar(mapeador.getInstanciaEntidade(instancia2))
+        instanciaDao.addOuAtualizar(mapeador.getInstanciaEntidade(instancia3))
 
-        instanciaDao.addOuAtualizar(Mapeador.getInstanciaEntidade(instancia4))
-        instanciaDao.addOuAtualizar(Mapeador.getInstanciaEntidade(instancia5))
+        instanciaDao.addOuAtualizar(mapeador.getInstanciaEntidade(instancia4))
+        instanciaDao.addOuAtualizar(mapeador.getInstanciaEntidade(instancia5))
 
 
         val contagem1 = instanciaDao.contarInstancias(template1.uid)

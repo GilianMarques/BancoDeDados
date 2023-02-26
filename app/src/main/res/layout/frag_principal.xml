@@ -19,6 +19,7 @@
         android:layout_margin="16dp"
         android:clickable="true"
         android:contentDescription="@string/Adicionar_objeto"
+
         android:src="@drawable/vec_add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

@@ -4,6 +4,7 @@ import android.view.View
 import android.view.View.GONE
 import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
+import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.gmarques.bancodedados.data.repositorios.InstanciaRepo
 import dev.gmarques.bancodedados.data.repositorios.PropriedadeRepo
 import dev.gmarques.bancodedados.databinding.InstanciaCampoBooleanoBinding
@@ -16,8 +17,14 @@ import dev.gmarques.bancodedados.domain.modelos.template.Campo
 import dev.gmarques.bancodedados.domain.modelos.template.Template
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class FragAddInstanciaViewModel : ViewModel() {
+@HiltViewModel
+class FragAddInstanciaViewModel @Inject constructor(
+    private val instanciaRepo: InstanciaRepo,
+    private val propriedadeRepo: PropriedadeRepo,
+) : ViewModel() {
+
     lateinit var template: Template
 
     fun validarEntradas(views: ArrayList<ViewBinding>): Boolean {
@@ -64,7 +71,7 @@ class FragAddInstanciaViewModel : ViewModel() {
     suspend fun salvarObjeto(views: ArrayList<ViewBinding>) = withContext(IO) {
 
         val instancia = Instancia(template.uid)
-        InstanciaRepo.addInstancia(instancia)
+        instanciaRepo.addInstancia(instancia)
 
         views.forEach { viewBinding ->
 
@@ -72,7 +79,7 @@ class FragAddInstanciaViewModel : ViewModel() {
             val propriedade = Propriedade(instancia.uid, campo.tipoCampo)
             atribuiValor(campo, propriedade, viewBinding)
 
-            PropriedadeRepo.addPropriedade(propriedade)
+            propriedadeRepo.addPropriedade(propriedade)
         }
     }
 

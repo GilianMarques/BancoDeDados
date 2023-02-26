@@ -6,12 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import dev.gmarques.bancodedados.R
 import dev.gmarques.bancodedados.databinding.FragAddInstanciaBinding
 import dev.gmarques.bancodedados.databinding.InstanciaCampoBooleanoBinding
@@ -19,12 +21,17 @@ import dev.gmarques.bancodedados.databinding.InstanciaCampoNumericoBinding
 import dev.gmarques.bancodedados.databinding.InstanciaCampoTextoBinding
 import dev.gmarques.bancodedados.domain.modelos.TipoCampo
 import dev.gmarques.bancodedados.domain.modelos.template.*
+import dev.gmarques.bancodedados.domain.modelos.template.Campo.Companion.COMPRIMENTO_MAXIMO_PADRAO
+import dev.gmarques.bancodedados.domain.modelos.template.Campo.Companion.COMPRIMENTO_MINIMO_PADRAO
+import dev.gmarques.bancodedados.domain.modelos.template.Campo.Companion.MAIOR_QUE_PADRAO
+import dev.gmarques.bancodedados.domain.modelos.template.Campo.Companion.MENOR_QUE_PADRAO
+import dev.gmarques.bancodedados.domain.modelos.template.Campo.Companion.PODE_SER_VAZIO_PADRAO
 import kotlinx.coroutines.launch
-
+@AndroidEntryPoint
 class FragAddInstancia : Fragment() {
 
     private lateinit var binding: FragAddInstanciaBinding
-    private lateinit var viewModel: FragAddInstanciaViewModel
+    private val viewModel: FragAddInstanciaViewModel by viewModels()
 
     private val args: FragAddInstanciaArgs by navArgs()
     private val views = ArrayList<ViewBinding>()
@@ -34,7 +41,6 @@ class FragAddInstancia : Fragment() {
         savedInstanceState: Bundle?,
     ): View {
 
-        viewModel = ViewModelProvider(this).get(FragAddInstanciaViewModel::class.java)
         binding = FragAddInstanciaBinding.inflate(inflater, container, false)
         return binding.root
 

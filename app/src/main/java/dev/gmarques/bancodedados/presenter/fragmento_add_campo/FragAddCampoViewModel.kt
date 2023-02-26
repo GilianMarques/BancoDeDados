@@ -3,12 +3,20 @@ package dev.gmarques.bancodedados.presenter.fragmento_add_campo
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.gmarques.bancodedados.R
 import dev.gmarques.bancodedados.databinding.FragAddCampoBinding
 import dev.gmarques.bancodedados.domain.modelos.TipoCampo
-import dev.gmarques.bancodedados.domain.modelos.template.*
+import dev.gmarques.bancodedados.domain.modelos.template.Campo
+import dev.gmarques.bancodedados.domain.modelos.template.Campo.Companion.COMPRIMENTO_MAXIMO_PADRAO
+import dev.gmarques.bancodedados.domain.modelos.template.Campo.Companion.COMPRIMENTO_MINIMO_PADRAO
+import dev.gmarques.bancodedados.domain.modelos.template.Campo.Companion.MAIOR_QUE_PADRAO
+import dev.gmarques.bancodedados.domain.modelos.template.Campo.Companion.MENOR_QUE_PADRAO
+import dev.gmarques.bancodedados.domain.modelos.template.Template
+import javax.inject.Inject
 
-class FragAddCampoViewModel : ViewModel() {
+@HiltViewModel
+class FragAddCampoViewModel @Inject constructor() : ViewModel() {
 
     lateinit var template: Template
 

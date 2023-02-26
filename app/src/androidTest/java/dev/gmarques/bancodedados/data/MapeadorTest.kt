@@ -1,6 +1,7 @@
 package dev.gmarques.bancodedados.data
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import dev.gmarques.bancodedados.data.json_serializador.JacksonJsonSerializador
 import dev.gmarques.bancodedados.domain.modelos.TipoCampo
 import dev.gmarques.bancodedados.domain.modelos.instancia.Instancia
 import dev.gmarques.bancodedados.domain.modelos.instancia.Propriedade
@@ -11,19 +12,23 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
+import javax.inject.Inject
 
 @RunWith(AndroidJUnit4::class)
 class MapeadorTest : TestCase() {
 
+    val mapeador = Mapeador(JacksonJsonSerializador())
+
     @Test
-    fun getInstanciaEntidade()  = runBlocking {
+    fun getInstanciaEntidade() = runBlocking {
         /*O teste passa se  não houver excepions*/
 
         val instancia = Instancia("template_uid_123")
-        val propriedade = Propriedade(instancia.uid, TipoCampo.BOOLEANO).apply { nome = "propriedade de teste 1" }
+        val propriedade =
+            Propriedade(instancia.uid, TipoCampo.BOOLEANO).apply { nome = "propriedade de teste 1" }
         instancia.propriedades.add(propriedade)
 
-        val entidade = Mapeador.getInstanciaEntidade(instancia)
+        @Suppress("UNUSED_VARIABLE") val entidade = mapeador.getInstanciaEntidade(instancia)
     }
 
     @Test
@@ -39,7 +44,7 @@ class MapeadorTest : TestCase() {
         val campo = Campo(template.uid, TipoCampo.BOOLEANO).apply { nome = "campo de teste 1" }
         template.addCampo(campo)
 
-        val entidade = Mapeador.getTemplateEntidade(template)
+        @Suppress("UNUSED_VARIABLE") val entidade = mapeador.getTemplateEntidade(template)
 
     }
 

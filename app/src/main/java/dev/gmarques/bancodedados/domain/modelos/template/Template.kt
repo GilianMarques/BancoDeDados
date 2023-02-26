@@ -1,9 +1,15 @@
 package dev.gmarques.bancodedados.domain.modelos.template
 
+import dev.gmarques.bancodedados.domain.Nomes
 import java.util.*
 import kotlin.collections.ArrayList
 
-class Template(var nome: String) : java.io.Serializable {
+class Template : java.io.Serializable {
+
+    var nome: String = ""
+        set(value) {
+            field = Nomes.adequarNome(value)
+        }
 
     val uid: String = UUID.randomUUID().toString()
 

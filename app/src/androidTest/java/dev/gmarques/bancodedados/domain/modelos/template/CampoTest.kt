@@ -2,13 +2,15 @@ package dev.gmarques.bancodedados.domain.modelos.template
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import dev.gmarques.bancodedados.domain.modelos.TipoCampo
-import org.junit.Assert.*
-
+import dev.gmarques.bancodedados.domain.modelos.template.Campo.Companion.COMPRIMENTO_MAXIMO_PERMITIDO
+import dev.gmarques.bancodedados.domain.modelos.template.Campo.Companion.COMPRIMENTO_MINIMO_PERMITIDO
+import dev.gmarques.bancodedados.domain.modelos.template.Campo.Companion.MAIOR_VALOR_PERMITIDO
+import dev.gmarques.bancodedados.domain.modelos.template.Campo.Companion.MENOR_VALOR_PERMITIDO
 import junit.framework.TestCase
-
+import org.junit.Assert
+import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
 
 @RunWith(AndroidJUnit4::class)
 class CampoTest : TestCase() {
@@ -63,4 +65,87 @@ class CampoTest : TestCase() {
         assertFalse(campoDeTexto2.validarEntradaDeTexto(null))
 
     }
+
+    @Test
+    fun validarNome() {
+        Assert.assertFalse(Campo.validarNome(null))
+        Assert.assertFalse(Campo.validarNome(""))
+        Assert.assertTrue(Campo.validarNome("nome valido"))
+    }
+
+    @Test
+    fun validarRegrasTexto() {
+
+        Campo.validarRegrasTexto(
+            COMPRIMENTO_MAXIMO_PERMITIDO + 1,
+            COMPRIMENTO_MINIMO_PERMITIDO
+        ).also { falharPorComprimentoLongoDeMais ->
+            assertFalse(falharPorComprimentoLongoDeMais)
+        }
+
+        Campo.validarRegrasTexto(
+            COMPRIMENTO_MAXIMO_PERMITIDO,
+            COMPRIMENTO_MINIMO_PERMITIDO - 1
+        ).also { falharPorComprimentoCurtoDeMais ->
+            assertFalse(falharPorComprimentoCurtoDeMais)
+        }
+
+
+        Campo.validarRegrasTexto(
+            COMPRIMENTO_MAXIMO_PERMITIDO + 1,
+            COMPRIMENTO_MINIMO_PERMITIDO - 1
+        ).also { falharPorComprimentoCurtoELongoDeMais ->
+            assertFalse(falharPorComprimentoCurtoELongoDeMais)
+        }
+
+
+        Campo.validarRegrasTexto(
+            COMPRIMENTO_MAXIMO_PERMITIDO,
+            COMPRIMENTO_MINIMO_PERMITIDO
+        ).also { passarPorComprimentoValido ->
+            assertTrue(passarPorComprimentoValido)
+        }
+
+
+    }
+
+    @Test
+    fun validarRegrasNumero() {
+
+        Campo.validarRegrasNumero(
+            MAIOR_VALOR_PERMITIDO,
+            MENOR_VALOR_PERMITIDO - 1
+        ).also { deveFalharPorMenorQueEstarForaDosLimites ->
+            assertFalse(deveFalharPorMenorQueEstarForaDosLimites)
+        }
+
+
+        Campo.validarRegrasNumero(
+            MAIOR_VALOR_PERMITIDO + 1,
+            MENOR_VALOR_PERMITIDO
+        ).also { deveFalharPorMaiorQueEstarForaDosLimites ->
+            assertFalse(deveFalharPorMaiorQueEstarForaDosLimites)
+        }
+
+
+
+        Campo.validarRegrasNumero(
+            MAIOR_VALOR_PERMITIDO + 1,
+            MENOR_VALOR_PERMITIDO - 1
+        ).also { deveFalharPorMaiorEMenorQueEstaremForaDosLimites ->
+            assertFalse(deveFalharPorMaiorEMenorQueEstaremForaDosLimites)
+        }
+
+
+        Campo.validarRegrasNumero(
+            MAIOR_VALOR_PERMITIDO,
+            MENOR_VALOR_PERMITIDO
+        ).also { devePassarPoisAmbosOsValoresEstaoDentroDosLimites ->
+            assertTrue(devePassarPoisAmbosOsValoresEstaoDentroDosLimites)
+        }
+
+
+    }
+
+
 }
