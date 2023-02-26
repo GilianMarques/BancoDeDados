@@ -56,8 +56,7 @@ class FragAddTemplate : Fragment() {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             bundle.getSerializable(FragAddCampo.ID_RESULTADO, Campo::class.java)
         } else {
-            @Suppress("DEPRECATION")
-            bundle.getSerializable(FragAddCampo.ID_RESULTADO) as Campo
+            @Suppress("DEPRECATION") bundle.getSerializable(FragAddCampo.ID_RESULTADO) as Campo
         }.also {
             if (it == null) throw java.lang.NullPointerException("O campo nao pode ser nulo. Se o usuario nao adicionou um campo o setFragmentResultListener nao deve ser invocado")
         }!!
@@ -81,6 +80,10 @@ class FragAddTemplate : Fragment() {
         campos.forEach { campo ->
             val vBinding = TemplateRemoverCampoBinding.inflate(layoutInflater)
             vBinding.tvNome.text = campo.nome
+            vBinding.ivRemover.setOnClickListener {
+                viewModel.template.removerCampo(campo)
+                binding.container.removeView(vBinding.root)
+            }
             binding.container.addView(vBinding.root)
         }
     }

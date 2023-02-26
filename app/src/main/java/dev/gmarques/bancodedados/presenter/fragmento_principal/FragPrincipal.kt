@@ -102,5 +102,11 @@ class FragPrincipal : Fragment(), MenuProvider {
         return true
     }
 
+    override fun onDestroyView() {
+        val menuHost: MenuHost = requireActivity()
+        menuHost.removeMenuProvider(this@FragPrincipal)
+        super.onDestroyView()
+    }
+
 
 }

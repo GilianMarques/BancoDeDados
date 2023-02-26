@@ -13,8 +13,6 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import dev.gmarques.bancodedados.databinding.FragAddCampoBinding
 
-// TODO:  corrigir menus e botao de voltar dos fragmentos
-// TODO: escrever testes do campo
 class FragAddCampo : Fragment() {
 
 

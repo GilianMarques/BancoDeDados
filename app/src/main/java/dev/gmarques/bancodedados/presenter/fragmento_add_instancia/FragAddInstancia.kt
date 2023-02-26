@@ -19,6 +19,11 @@ import dev.gmarques.bancodedados.databinding.InstanciaCampoNumericoBinding
 import dev.gmarques.bancodedados.databinding.InstanciaCampoTextoBinding
 import dev.gmarques.bancodedados.domain.modelos.TipoCampo
 import dev.gmarques.bancodedados.domain.modelos.template.*
+import dev.gmarques.bancodedados.domain.modelos.template.Campo.Companion.COMPRIMENTO_MAXIMO_PADRAO
+import dev.gmarques.bancodedados.domain.modelos.template.Campo.Companion.COMPRIMENTO_MINIMO_PADRAO
+import dev.gmarques.bancodedados.domain.modelos.template.Campo.Companion.MAIOR_QUE_PADRAO
+import dev.gmarques.bancodedados.domain.modelos.template.Campo.Companion.MENOR_QUE_PADRAO
+import dev.gmarques.bancodedados.domain.modelos.template.Campo.Companion.PODE_SER_VAZIO_PADRAO
 import kotlinx.coroutines.launch
 
 class FragAddInstancia : Fragment() {

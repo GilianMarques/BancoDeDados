@@ -3,27 +3,10 @@ package dev.gmarques.bancodedados.domain.modelos.template
 import dev.gmarques.bancodedados.domain.modelos.TipoCampo
 import java.util.*
 
-// TODO: avaliar usar uma factory pra criar essa classe se assegurando de nao faltar nenhuma info e mover os valores padrao pra dentro da classe assim como os metodos estaticos
-
-
-// regras de negocio
-const val COMPRIMENTO_MAXIMO_PERMITIDO = 1000
-const val COMPRIMENTO_MINIMO_PERMITIDO = 0
-const val MENOR_VALOR_PERMITIDO = -2147483648
-const val MAIOR_VALOR_PERMITIDO = 2147483647
-
-// valores padrao
-const val PODE_SER_VAZIO_PADRAO = false
-const val COMPRIMENTO_MAXIMO_PADRAO = 150
-const val COMPRIMENTO_MINIMO_PADRAO = 0
-const val MAIOR_QUE_PADRAO = -999_999
-const val MENOR_QUE_PADRAO = 999_999
-
 class Campo(@Suppress("unused") val templateUid: String, var tipoCampo: TipoCampo) :
     java.io.Serializable {
 
-
-    val uid: String = UUID.randomUUID().toString()
+     val uid: String = UUID.randomUUID().toString()
     var nome = ""
     var podeSerVazio = PODE_SER_VAZIO_PADRAO
     var comprimentoMaximo = COMPRIMENTO_MAXIMO_PADRAO
@@ -59,8 +42,21 @@ class Campo(@Suppress("unused") val templateUid: String, var tipoCampo: TipoCamp
         return true
     }
 
-    // TODO: testar essas funçoes
     companion object {
+
+        // regras de negocio
+        const val COMPRIMENTO_MAXIMO_PERMITIDO = 1500
+        const val COMPRIMENTO_MINIMO_PERMITIDO = 0
+        const val MENOR_VALOR_PERMITIDO = -999_999_999
+        const val MAIOR_VALOR_PERMITIDO = 999_999_999
+
+        // valores padrao
+        val PODE_SER_VAZIO_PADRAO = false
+        val COMPRIMENTO_MAXIMO_PADRAO = 150
+        val COMPRIMENTO_MINIMO_PADRAO = 0
+        val MAIOR_QUE_PADRAO = -999_999
+        val MENOR_QUE_PADRAO = 999_999
+
         /**
          * Valida o nome do campo
          * */

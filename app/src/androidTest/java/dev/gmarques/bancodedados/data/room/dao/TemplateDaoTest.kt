@@ -3,8 +3,7 @@ package dev.gmarques.bancodedados.data.room.dao
 import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import dev.gmarques.bancodedados.data.Mapeador
-import dev.gmarques.bancodedados.data.room.RoomDb
+import dev.gmarques.bancodedados.data.room.RoomDataBase
 import dev.gmarques.bancodedados.domain.modelos.TipoCampo
 import dev.gmarques.bancodedados.domain.modelos.template.Campo
 import dev.gmarques.bancodedados.domain.modelos.template.Template
@@ -22,16 +21,16 @@ class TemplateDaoTest : TestCase() {
 
     private lateinit var entradaUiDao: CampoDao
     private lateinit var templateDao: TemplateDao
-    private lateinit var db: RoomDb
+    private lateinit var db: RoomDataBase
 
     @Before
     public override fun setUp() {
 
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        db = Room.inMemoryDatabaseBuilder(appContext, RoomDb::class.java).build()
+        db = Room.inMemoryDatabaseBuilder(appContext, RoomDataBase::class.java).build()
 
         templateDao = db.templateDao()
-        entradaUiDao = db.entradaDao()
+        entradaUiDao = db.campoDao()
     }
 
     @After
@@ -51,9 +50,9 @@ class TemplateDaoTest : TestCase() {
             podeSerVazio = true
         }
 
-        templateDao.addOuAtualizar(Mapeador.getTemplateEntidade(template))
-        entradaUiDao.addOuAtualizar(Mapeador.getEntradaEntidade(campo1))
-        entradaUiDao.addOuAtualizar(Mapeador.getEntradaEntidade(campo2))
+        templateDao.addOuAtualizar(mapeador.getTemplateEntidade(template))
+        entradaUiDao.addOuAtualizar(mapeador.getEntradaEntidade(campo1))
+        entradaUiDao.addOuAtualizar(mapeador.getEntradaEntidade(campo2))
 
         val templates = templateDao.getTodosOsTemplates()
 

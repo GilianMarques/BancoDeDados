@@ -1,11 +1,9 @@
 package dev.gmarques.bancodedados.data.room
 
 import androidx.room.Database
-import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import dev.gmarques.bancodedados.App
 import dev.gmarques.bancodedados.data.room.entidades.PropriedadeEntidade
 import dev.gmarques.bancodedados.data.room.entidades.CampoEntidade
 import dev.gmarques.bancodedados.data.room.entidades.InstanciaEntidade
@@ -21,31 +19,12 @@ import dev.gmarques.bancodedados.data.room.dao.TemplateDao
     exportSchema = true
 )
 
-abstract class RoomDb : RoomDatabase() {
+abstract class RoomDataBase : RoomDatabase() {
 
     abstract fun propriedadeDao(): PropriedadeDao
-    abstract fun entradaDao(): CampoDao
+    abstract fun campoDao(): CampoDao
     abstract fun templateDao(): TemplateDao
     abstract fun instanciaDao(): InstanciaDao
-
-
-    companion object {
-
-        @Volatile
-        private var INSTANCIA: RoomDb? = null
-
-        @Synchronized // use as classes repositorio pra I/O no banco
-        fun getInstancia() =
-            INSTANCIA ?: criarDb().also { INSTANCIA = it }
-
-        private fun criarDb() =
-            Room.databaseBuilder(
-                App.get.applicationContext, RoomDb::class.java, "app-database.sql"
-            ).addMigrations(Migrations.MIGRATION)
-                .build()
-
-
-    }
 
     class Migrations {
         companion object {
@@ -55,7 +34,7 @@ abstract class RoomDb : RoomDatabase() {
                 * excelente oportinudade para implmentar uma migração */
 
                 override fun migrate(database: SupportSQLiteDatabase) {
-                    database.query("UPDATE campos SET tipo_campo = 'BOOLEANO'")
+                    //database.query("UPDATE campos SET tipo_campo = 'BOOLEANO'")
                  //   database.query("UPDATE propriedades SET tipo_campo = 'BOOLEANO'")
                 }
             }

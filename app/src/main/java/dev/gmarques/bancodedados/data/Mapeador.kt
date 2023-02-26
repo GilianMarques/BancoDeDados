@@ -1,7 +1,6 @@
 package dev.gmarques.bancodedados.data
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
+import dev.gmarques.bancodedados.data.json_serializador.JsonSerializador
 import dev.gmarques.bancodedados.data.room.entidades.CampoEntidade
 import dev.gmarques.bancodedados.data.room.entidades.InstanciaEntidade
 import dev.gmarques.bancodedados.data.room.entidades.PropriedadeEntidade
@@ -14,48 +13,60 @@ import dev.gmarques.bancodedados.domain.modelos.template.Template
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
+import javax.inject.Inject
+import javax.inject.Singleton
 
-// TODO: empacotar e testar o jackson
-// TODO: testar as funçoes conforme forem entrando em uso 
-object Mapeador {
-    // https://stackabuse.com/reading-and-writing-json-in-kotlin-with-jackson/
-    private val jackson = jacksonObjectMapper()
+
+// TODO: testar as funçoes conforme forem entrando em uso
+@Singleton
+class Mapeador @Inject constructor() {
+
+    @Inject
+    lateinit var jsonSerializador: JsonSerializador
 
     suspend fun getInstanciaEntidade(mInstancia: Instancia): InstanciaEntidade = withContext(IO) {
-        val jsonString = JSONObject(jackson.writeValueAsString(mInstancia))
-            .apply { remove("propriedades") }.toString()
+        val jsonString =
+            JSONObject(jsonSerializador.toJSon(mInstancia)).apply { remove("propriedades") }
+                .toString()
 
-        jackson.readValue(jsonString)
+        jsonSerializador.fromJson(jsonString, InstanciaEntidade::class.java)
     }
 
     suspend fun getPropriedadeEntidade(mPropriedade: Propriedade): PropriedadeEntidade =
         withContext(IO) {
-            jackson.readValue(jackson.writeValueAsString(mPropriedade))
+            jsonSerializador.fromJson(
+                jsonSerializador.toJSon(mPropriedade),
+                PropriedadeEntidade::class.java
+            )
         }
 
     suspend fun getTemplateEntidade(mTemplate: Template): TemplateEntidade = withContext(IO) {
 
         // classe TemplateEntidade não tem a variavel campos, removo pra evitar exceptions
-        val jsonString = JSONObject(jackson.writeValueAsString(mTemplate))
-            .apply { remove("campos") }.toString()
+        val jsonString =
+            JSONObject(jsonSerializador.toJSon(mTemplate)).apply { remove("campos") }.toString()
 
-        jackson.readValue(jsonString)
+        jsonSerializador.fromJson(jsonString, TemplateEntidade::class.java)
     }
 
     suspend fun getEntradaEntidade(mCampo: Campo): CampoEntidade = withContext(IO) {
-        jackson.readValue(jackson.writeValueAsString(mCampo))
+        jsonSerializador.fromJson(jsonSerializador.toJSon(mCampo), CampoEntidade::class.java)
     }
 
     suspend fun getTemplate(templateComCampos: TemplateComCampos): Template = withContext(IO) {
 
 
         val template: Template =
-            jackson.readValue(jackson.writeValueAsString(templateComCampos.template))
+            jsonSerializador.fromJson(
+                jsonSerializador.toJSon(templateComCampos.template),
+                Template::class.java
+            )
 
         templateComCampos.entradas.forEach {
 
-            val entradaEntidadeString: String = jackson.writeValueAsString(it)
-            val campo: Campo = jackson.readValue(entradaEntidadeString)
+            val entradaEntidadeString: String = jsonSerializador.toJSon(it)
+            val campo: Campo =
+                jsonSerializador.fromJson(entradaEntidadeString, Campo::class.java)
             template.addCampo(campo)
 
         }
