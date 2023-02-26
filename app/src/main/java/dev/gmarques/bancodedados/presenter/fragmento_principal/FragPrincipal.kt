@@ -1,26 +1,34 @@
 package dev.gmarques.bancodedados.presenter.fragmento_principal
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import dev.gmarques.bancodedados.R
+import dev.gmarques.bancodedados.data.repositorios.InstanciaRepo
 import dev.gmarques.bancodedados.databinding.FragPrincipalBinding
 import dev.gmarques.bancodedados.domain.modelos.template.Template
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class FragPrincipal : Fragment(), MenuProvider {
 
     private lateinit var binding: FragPrincipalBinding
-    private lateinit var viewModel: FragPrincipalViewModel
+    private val viewModel: FragPrincipalViewModel by viewModels()
+
+    @Inject
+    lateinit var instanciasRepo: InstanciaRepo
+
     private lateinit var adapter: TemplateAdapter
 
     override fun onCreateView(
@@ -38,12 +46,10 @@ class FragPrincipal : Fragment(), MenuProvider {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(this)[FragPrincipalViewModel::class.java]
-
         atualizarToolbar()
         initBotaoAddObjeto()
         initRecyclerView()
-        ouvirAtualizacoesNosTemplates()
+        observarAtualizacoesNosTemplates()
         initMenu()
     }
 
@@ -52,14 +58,15 @@ class FragPrincipal : Fragment(), MenuProvider {
         menuHost.addMenuProvider(this@FragPrincipal)
     }
 
-    private fun ouvirAtualizacoesNosTemplates() {
+    private fun observarAtualizacoesNosTemplates() {
         viewModel.templates.observe(viewLifecycleOwner) { itens ->
             adapter.atualizar(itens)
+            Log.d("USUK", "FragPrincipal.observarAtualizacoesNosTemplates: ${itens.size}")
         }
     }
 
     private fun initRecyclerView() {
-        adapter = TemplateAdapter(this@FragPrincipal)
+        adapter = TemplateAdapter(this@FragPrincipal, instanciasRepo)
         binding.rvTemplates.layoutManager = LinearLayoutManager(requireContext())
         binding.rvTemplates.adapter = adapter
     }

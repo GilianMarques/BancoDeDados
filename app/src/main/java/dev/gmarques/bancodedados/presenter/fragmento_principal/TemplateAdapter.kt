@@ -4,6 +4,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
+import dagger.hilt.EntryPoint
 import dev.gmarques.bancodedados.R
 import dev.gmarques.bancodedados.data.repositorios.InstanciaRepo
 import dev.gmarques.bancodedados.data.room.RoomDataBase
@@ -15,13 +16,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class TemplateAdapter(val fragmento: Fragment) :
+class TemplateAdapter(val fragmento: Fragment, private val instanciasRepo: InstanciaRepo) :
     RecyclerView.Adapter<TemplateAdapter.Holder>() {
 
     val itens = ArrayList<Template>()
-
-    @Inject
-    lateinit var instanciasRepo: InstanciaRepo
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         Holder(ItemTemplateBinding.inflate(fragmento.layoutInflater, parent, false))

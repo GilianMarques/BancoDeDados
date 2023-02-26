@@ -1,6 +1,7 @@
 package dev.gmarques.bancodedados.data
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import dev.gmarques.bancodedados.data.json_serializador.JacksonJsonSerializador
 import dev.gmarques.bancodedados.domain.modelos.TipoCampo
 import dev.gmarques.bancodedados.domain.modelos.instancia.Instancia
 import dev.gmarques.bancodedados.domain.modelos.instancia.Propriedade
@@ -16,8 +17,7 @@ import javax.inject.Inject
 @RunWith(AndroidJUnit4::class)
 class MapeadorTest : TestCase() {
 
-    @Inject
-    private lateinit var mapeador: Mapeador
+    val mapeador = Mapeador(JacksonJsonSerializador())
 
     @Test
     fun getInstanciaEntidade() = runBlocking {

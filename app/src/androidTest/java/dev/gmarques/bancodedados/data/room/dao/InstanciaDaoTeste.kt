@@ -4,6 +4,8 @@ import android.util.Log
 import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import dev.gmarques.bancodedados.data.Mapeador
+import dev.gmarques.bancodedados.data.json_serializador.JacksonJsonSerializador
 import dev.gmarques.bancodedados.data.room.RoomDataBase
 import dev.gmarques.bancodedados.domain.modelos.TipoCampo
 import dev.gmarques.bancodedados.domain.modelos.instancia.Propriedade
@@ -18,13 +20,17 @@ import org.junit.runner.RunWith
 
 import org.junit.Assert.*
 import org.junit.Before
+import javax.inject.Inject
 
 @RunWith(AndroidJUnit4::class)
 class InstanciaDaoTest : TestCase() {
 
-    private lateinit var campoDao: PropriedadeDao
+    // nao devem ser injetados com hilt
+    private lateinit var propriedadeDao: PropriedadeDao
     private lateinit var db: RoomDataBase
     private lateinit var instanciaDao: InstanciaDao
+
+    val mapeador = Mapeador(JacksonJsonSerializador())
 
     @Before
     public override fun setUp() {
@@ -34,7 +40,7 @@ class InstanciaDaoTest : TestCase() {
         db = Room.inMemoryDatabaseBuilder(appContext, RoomDataBase::class.java).build()
 
         instanciaDao = db.instanciaDao()
-        campoDao = db.propriedadeDao()
+        propriedadeDao = db.propriedadeDao()
     }
 
     @Test
@@ -51,8 +57,8 @@ class InstanciaDaoTest : TestCase() {
             Propriedade(mInstancia.uid, TipoCampo.BOOLEANO).apply { valorBoolean = true }
         val mBooleanEntidade = mapeador.getPropriedadeEntidade(mCampoBoolean)
 
-        campoDao.addOuAtualizar(mDoubleEntidade)
-        campoDao.addOuAtualizar(mBooleanEntidade)
+        propriedadeDao.addOuAtualizar(mDoubleEntidade)
+        propriedadeDao.addOuAtualizar(mBooleanEntidade)
 
         instanciaDao.addOuAtualizar(mInstanciaEntidade)
 

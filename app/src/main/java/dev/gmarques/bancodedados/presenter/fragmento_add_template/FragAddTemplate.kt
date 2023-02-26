@@ -7,18 +7,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import dev.gmarques.bancodedados.databinding.FragAddTemplateBinding
 import dev.gmarques.bancodedados.databinding.TemplateRemoverCampoBinding
 import dev.gmarques.bancodedados.domain.modelos.template.Campo
 import dev.gmarques.bancodedados.presenter.fragmento_add_campo.FragAddCampo
 
+@AndroidEntryPoint
 class FragAddTemplate : Fragment() {
 
 
     private lateinit var binding: FragAddTemplateBinding
-    private lateinit var viewModel: FragAddTemplateViewModel
+    private val viewModel: FragAddTemplateViewModel  by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,8 +30,6 @@ class FragAddTemplate : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        viewModel = ViewModelProvider(this).get(FragAddTemplateViewModel::class.java)
 
         initFabAddCampo()
         initListenerDoFragmentoAddCampo()

@@ -17,8 +17,10 @@ class App : Application() {
 
     @Inject
     lateinit var mapeador: Mapeador
+
     @Inject
     lateinit var templateDao: TemplateDao
+
     @Inject
     lateinit var campoDao: CampoDao
 
@@ -42,7 +44,8 @@ class App : Application() {
             }
             val faixa = Campo(musica.uid, TipoCampo.NUMERO).apply {
                 nome = "N° faixa"
-                comprimentoMaximo = 2
+                maiorQue = 0
+                menorQue = 99
             }
 
             templateDao.addOuAtualizar(mapeador.getTemplateEntidade(musica))

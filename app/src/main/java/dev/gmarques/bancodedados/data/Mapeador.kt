@@ -19,10 +19,7 @@ import javax.inject.Singleton
 
 // TODO: testar as funçoes conforme forem entrando em uso
 @Singleton
-class Mapeador @Inject constructor() {
-
-    @Inject
-    lateinit var jsonSerializador: JsonSerializador
+class Mapeador @Inject constructor(val jsonSerializador: JsonSerializador) {
 
     suspend fun getInstanciaEntidade(mInstancia: Instancia): InstanciaEntidade = withContext(IO) {
         val jsonString =

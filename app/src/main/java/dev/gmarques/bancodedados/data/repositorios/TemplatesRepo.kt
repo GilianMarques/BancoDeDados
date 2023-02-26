@@ -10,12 +10,11 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class TemplatesRepo @Inject constructor() {
+class TemplatesRepo @Inject constructor(
+    private val mapeador: Mapeador,
+    private val templateDao: TemplateDao,
+) {
 
-    @Inject
-    lateinit var mapeador: Mapeador
-    @Inject
-    lateinit var templateDao: TemplateDao
 
     suspend fun carregarTemplates(): ArrayList<Template> = withContext(IO) {
         val templates = ArrayList<Template>()

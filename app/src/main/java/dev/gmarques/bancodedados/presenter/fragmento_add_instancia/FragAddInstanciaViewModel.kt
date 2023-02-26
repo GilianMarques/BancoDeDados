@@ -20,15 +20,12 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class FragAddInstanciaViewModel @Inject constructor() : ViewModel() {
+class FragAddInstanciaViewModel @Inject constructor(
+    private val instanciaRepo: InstanciaRepo,
+    private val propriedadeRepo: PropriedadeRepo,
+) : ViewModel() {
 
     lateinit var template: Template
-
-    @Inject
-    lateinit var instanciaRepo: InstanciaRepo
-
-    @Inject
-    lateinit var propriedadeRepo: PropriedadeRepo
 
     fun validarEntradas(views: ArrayList<ViewBinding>): Boolean {
         views.forEach {
