@@ -7,6 +7,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FragAddTemplateViewModel @Inject constructor() : ViewModel() {
-    val template = Template("")
+    val template = Template()
 
 }

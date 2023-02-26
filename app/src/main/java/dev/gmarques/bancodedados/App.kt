@@ -3,7 +3,6 @@ package dev.gmarques.bancodedados
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
 import dev.gmarques.bancodedados.data.Mapeador
-import dev.gmarques.bancodedados.data.room.RoomDataBase
 import dev.gmarques.bancodedados.data.room.dao.CampoDao
 import dev.gmarques.bancodedados.data.room.dao.TemplateDao
 import dev.gmarques.bancodedados.domain.modelos.TipoCampo
@@ -37,7 +36,7 @@ class App : Application() {
             ) return@runBlocking
 
 
-            val musica = Template("Musica")
+            val musica = Template().apply { nome="Musica" }
             val artista = Campo(musica.uid, TipoCampo.TEXTO).apply {
                 nome = "Artista"
                 comprimentoMaximo = 30
@@ -53,7 +52,7 @@ class App : Application() {
             campoDao.addOuAtualizar(mapeador.getEntradaEntidade(faixa))
 
 
-            val jogos = Template("Jogo")
+            val jogos = Template().apply { nome="Jogo"}
             val genero = Campo(jogos.uid, TipoCampo.TEXTO).apply {
                 nome = "Genero"
                 comprimentoMaximo = 30

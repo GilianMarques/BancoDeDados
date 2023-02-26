@@ -40,8 +40,9 @@ class Mapeador @Inject constructor(val jsonSerializador: JsonSerializador) {
     suspend fun getTemplateEntidade(mTemplate: Template): TemplateEntidade = withContext(IO) {
 
         // classe TemplateEntidade não tem a variavel campos, removo pra evitar exceptions
-        val jsonString =
-            JSONObject(jsonSerializador.toJSon(mTemplate)).apply { remove("campos") }.toString()
+        val jsonString = JSONObject(jsonSerializador.toJSon(mTemplate))
+            .apply { remove("campos") }
+            .toString()
 
         jsonSerializador.fromJson(jsonString, TemplateEntidade::class.java)
     }

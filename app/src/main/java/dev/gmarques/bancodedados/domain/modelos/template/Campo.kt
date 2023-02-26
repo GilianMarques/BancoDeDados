@@ -1,13 +1,17 @@
 package dev.gmarques.bancodedados.domain.modelos.template
 
+import dev.gmarques.bancodedados.domain.Nomes
 import dev.gmarques.bancodedados.domain.modelos.TipoCampo
 import java.util.*
 
 class Campo(@Suppress("unused") val templateUid: String, var tipoCampo: TipoCampo) :
     java.io.Serializable {
 
-     val uid: String = UUID.randomUUID().toString()
+    val uid: String = UUID.randomUUID().toString()
     var nome = ""
+        set(value) {
+            field = Nomes.adequarNome(value)
+        }
     var podeSerVazio = PODE_SER_VAZIO_PADRAO
     var comprimentoMaximo = COMPRIMENTO_MAXIMO_PADRAO
     var comprimentoMinimo = COMPRIMENTO_MINIMO_PADRAO

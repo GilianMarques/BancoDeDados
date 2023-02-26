@@ -1,5 +1,6 @@
 package dev.gmarques.bancodedados.domain.modelos.instancia
 
+import dev.gmarques.bancodedados.domain.Nomes
 import dev.gmarques.bancodedados.domain.modelos.TipoCampo
 import java.util.*
 
@@ -14,7 +15,9 @@ class Propriedade():java.io.Serializable{
 
     val uid: String = UUID.randomUUID().toString()
     var nome = ""
-
+        set(value) {
+            field = Nomes.adequarNome(value)
+        }
     lateinit var tipoCampo: TipoCampo
 
     var valorString: String = ""

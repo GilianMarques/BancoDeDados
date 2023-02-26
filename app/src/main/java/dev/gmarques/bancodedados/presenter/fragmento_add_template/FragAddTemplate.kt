@@ -2,17 +2,18 @@ package dev.gmarques.bancodedados.presenter.fragmento_add_template
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dev.gmarques.bancodedados.databinding.FragAddTemplateBinding
 import dev.gmarques.bancodedados.databinding.TemplateRemoverCampoBinding
+import dev.gmarques.bancodedados.domain.Nomes
 import dev.gmarques.bancodedados.domain.modelos.template.Campo
 import dev.gmarques.bancodedados.presenter.fragmento_add_campo.FragAddCampo
 
@@ -21,7 +22,7 @@ class FragAddTemplate : Fragment() {
 
 
     private lateinit var binding: FragAddTemplateBinding
-    private val viewModel: FragAddTemplateViewModel  by viewModels()
+    private val viewModel: FragAddTemplateViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,18 +33,38 @@ class FragAddTemplate : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initFabAddCampo()
+        initEdtNome()
         initListenerDoFragmentoAddCampo()
         exibirViewsDosCampos(viewModel.template.getCampos())
+        initFabConcluir()
 
-        binding.edtNome.requestFocus()
+    }
+
+    private fun initEdtNome() {
+
+        if ((binding.edtNome.text?.length ?: 0) > 0) {
+            binding.edtNome.requestFocus()
+        }
+
+        binding.edtNome.setOnFocusChangeListener { view: View, b: Boolean ->
+            if (!b) binding.edtNome.setText(Nomes.adequarNome(binding.edtNome.text.toString()))
+        }
+    }
+
+    private fun initFabConcluir() {
+        binding.fabAddTemplate.setOnClickListener {
+            // TODO: validar entradas do usuario e salvar template
+        }
+
     }
 
     private fun initListenerDoFragmentoAddCampo() {
         setFragmentResultListener(FragAddCampo.CHAVE_RESULTADO) { chave: String, bundle: Bundle ->
-            if (FragAddCampo.CHAVE_RESULTADO.equals(chave)) {
+            if (FragAddCampo.CHAVE_RESULTADO == chave) {
                 val campo = getCampo(bundle)
                 viewModel.template.addCampo(campo)
                 exibirViewsDosCampos(arrayListOf(campo))
+
             }
         }
     }
@@ -65,11 +86,12 @@ class FragAddTemplate : Fragment() {
 
     private fun initFabAddCampo() {
         binding.fabAddCampo.setOnClickListener {
-            navegarParaFragmentoAdcionarCampo()
+            binding.edtNome.clearFocus()
+            navegarParaFragmentoAdicionarCampo()
         }
     }
 
-    private fun navegarParaFragmentoAdcionarCampo() {
+    private fun navegarParaFragmentoAdicionarCampo() {
         val action = FragAddTemplateDirections.actionAddCampo(viewModel.template)
         findNavController().navigate(action)
     }
