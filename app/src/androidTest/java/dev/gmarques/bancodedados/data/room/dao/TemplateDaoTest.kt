@@ -45,10 +45,10 @@ class TemplateDaoTest : TestCase() {
     fun getTodosOsTemplates() = runBlocking {
 
         val template = Template().apply { nome = "Musica" }
-        val campo1 = Campo(template.uid, TipoCampo.TEXTO).apply {
+        val campo1 = Campo( TipoCampo.TEXTO).apply {
             nome = "Album"
         }
-        val campo2 = Campo(template.uid, TipoCampo.NUMERO).apply {
+        val campo2 = Campo( TipoCampo.NUMERO).apply {
             nome = "Posição"
             comprimentoMaximo = 24
             comprimentoMinimo = 1

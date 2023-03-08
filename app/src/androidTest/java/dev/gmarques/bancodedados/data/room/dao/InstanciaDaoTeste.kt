@@ -46,15 +46,15 @@ class InstanciaDaoTest : TestCase() {
     @Test
     fun getInstanciasComCampos() = runBlocking {
 
-        val mInstancia = Instancia("").apply { this.templateUid = "templateUid_123" }
+        val mInstancia = Instancia().apply { this.templateUid = "templateUid_123" }
         val mInstanciaEntidade = mapeador.getInstanciaEntidade(mInstancia)
 
         val mCampoDouble =
-            Propriedade(mInstancia.uid, TipoCampo.NUMERO).apply { valorDouble = 999.0 }
+            Propriedade( TipoCampo.NUMERO).apply { valorDouble = 999.0 }
         val mDoubleEntidade = mapeador.getPropriedadeEntidade(mCampoDouble)
 
         val mCampoBoolean =
-            Propriedade(mInstancia.uid, TipoCampo.BOOLEANO).apply { valorBoolean = true }
+            Propriedade( TipoCampo.BOOLEANO).apply { valorBoolean = true }
         val mBooleanEntidade = mapeador.getPropriedadeEntidade(mCampoBoolean)
 
         propriedadeDao.addOuAtualizar(mDoubleEntidade)
@@ -75,12 +75,12 @@ class InstanciaDaoTest : TestCase() {
         val template1 = Template().apply { nome="teste_template" }
         val template2 = Template().apply { nome="teste_template_2" }
 
-        val instancia1 = Instancia(template1.uid)
-        val instancia2 = Instancia(template1.uid)
-        val instancia3 = Instancia(template1.uid)
+        val instancia1 = Instancia()
+        val instancia2 = Instancia()
+        val instancia3 = Instancia()
 
-        val instancia4 = Instancia(template2.uid)
-        val instancia5 = Instancia(template2.uid)
+        val instancia4 = Instancia()
+        val instancia5 = Instancia()
 
         instanciaDao.addOuAtualizar(mapeador.getInstanciaEntidade(instancia1))
         instanciaDao.addOuAtualizar(mapeador.getInstanciaEntidade(instancia2))

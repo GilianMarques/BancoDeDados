@@ -25,9 +25,9 @@ class Campo(var tipoCampo: TipoCampo) :
      * */
     fun validarEntradaNumerica(entradaUsuario: Long?): Boolean {
 
-        if (entradaUsuario == null && !podeSerVazio) return false
-        if (entradaUsuario != null && entradaUsuario <= maiorQue) return false
-        if (entradaUsuario != null && entradaUsuario >= menorQue) return false
+        if (entradaUsuario == null) return podeSerVazio
+        if (entradaUsuario <= maiorQue) return false
+        if (entradaUsuario >= menorQue) return false
 
         return true
     }
@@ -36,7 +36,6 @@ class Campo(var tipoCampo: TipoCampo) :
      * Valida o valor que o usuario esta tentando inserir no campo
      * */
     fun validarEntradaDeTexto(entradaUsuario: String?): Boolean {
-// TODO: verificar erro de validaçao desse campo e rever testes
         if (entradaUsuario == null || entradaUsuario.isEmpty() || entradaUsuario.isBlank()) {
             return podeSerVazio
         } else {

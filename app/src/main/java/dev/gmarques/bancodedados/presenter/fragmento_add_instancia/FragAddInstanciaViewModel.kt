@@ -2,7 +2,10 @@ package dev.gmarques.bancodedados.presenter.fragmento_add_instancia
 
 import android.view.View
 import android.view.View.GONE
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.viewbinding.ViewBinding
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.gmarques.bancodedados.data.repositorios.InstanciaRepo
@@ -15,7 +18,9 @@ import dev.gmarques.bancodedados.domain.modelos.instancia.Instancia
 import dev.gmarques.bancodedados.domain.modelos.instancia.Propriedade
 import dev.gmarques.bancodedados.domain.modelos.template.Campo
 import dev.gmarques.bancodedados.domain.modelos.template.Template
+import dev.gmarques.bancodedados.presenter.SingleShotLiveData
 import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -27,11 +32,22 @@ class FragAddInstanciaViewModel @Inject constructor(
 
     lateinit var template: Template
 
-    fun validarEntradas(views: ArrayList<ViewBinding>): Boolean {
+    private val _validarESalvar = SingleShotLiveData<Boolean>()
+    val validarESalvar: LiveData<Boolean?> get() = _validarESalvar
+
+
+    fun validareSalvarInstancia(views: ArrayList<ViewBinding>) = viewModelScope.launch(IO) {
+        if (validarEntradas(views)) {
+            salvarObjeto(views)
+            _validarESalvar.postValue(true)
+        } else _validarESalvar.postValue(false)
+    }
+
+    private fun validarEntradas(views: ArrayList<ViewBinding>): Boolean {
         views.forEach {
             when (it) {
-                is InstanciaCampoNumericoBinding -> validarCampoNumerico(it)
-                is InstanciaCampoTextoBinding -> validarCampoDeTexto(it)
+                is InstanciaCampoNumericoBinding -> if (!validarCampoNumerico(it)) return false
+                is InstanciaCampoTextoBinding -> if (!validarCampoDeTexto(it)) return false
             }
         }
 
@@ -43,7 +59,7 @@ class FragAddInstanciaViewModel @Inject constructor(
 
         val campo = it.root.tag as Campo
         val entradaUsuario = it.edtEntrada.text.toString()
-
+// TODO: mover logica que modifica view para o fragmento
         return campo.validarEntradaDeTexto(entradaUsuario)
             .apply {
                 if (!this) {
@@ -53,6 +69,9 @@ class FragAddInstanciaViewModel @Inject constructor(
             }
     }
 
+    /**
+     * @return true se a validação concluiu que a entrada e valida, senao, false
+     * */
     private fun validarCampoNumerico(it: InstanciaCampoNumericoBinding): Boolean {
         it.tvRegras.visibility = GONE
 
@@ -68,7 +87,7 @@ class FragAddInstanciaViewModel @Inject constructor(
             }
     }
 
-    suspend fun salvarObjeto(views: ArrayList<ViewBinding>) = withContext(IO) {
+    private suspend fun salvarObjeto(views: ArrayList<ViewBinding>) {
 
         val instancia = Instancia()
         instanciaRepo.addInstancia(instancia, template)
@@ -103,5 +122,6 @@ class FragAddInstanciaViewModel @Inject constructor(
             }
         }
     }
+
 
 }

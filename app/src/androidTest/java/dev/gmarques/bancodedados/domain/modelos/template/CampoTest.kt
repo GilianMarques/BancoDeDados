@@ -18,7 +18,7 @@ class CampoTest : TestCase() {
     @Test
     fun validarEntradaNumerica() {
 
-        val campoNumerico = Campo("template_uid_123", TipoCampo.NUMERO)
+        val campoNumerico = Campo( TipoCampo.NUMERO)
             .apply {
                 maiorQue = 0
                 menorQue = 101
@@ -37,7 +37,7 @@ class CampoTest : TestCase() {
     @Test
     fun validarEntradaDeTexto() {
 
-        val campoDeTexto = Campo("tempalte_uid_345", TipoCampo.TEXTO)
+        val campoDeTextoQuePodeSerVazio = Campo(TipoCampo.TEXTO)
             .apply {
                 comprimentoMaximo = 20
                 comprimentoMinimo = 5
@@ -45,23 +45,25 @@ class CampoTest : TestCase() {
             }
 
 
-        assertTrue(campoDeTexto.validarEntradaDeTexto("teste de comprimento"))
-        assertTrue(campoDeTexto.validarEntradaDeTexto("teste"))
+        assertTrue(campoDeTextoQuePodeSerVazio.validarEntradaDeTexto("teste de comprimento"))
+        assertTrue(campoDeTextoQuePodeSerVazio.validarEntradaDeTexto("teste"))
 
-        assertFalse(campoDeTexto.validarEntradaDeTexto("teste de comprimento invalido"))
-        assertFalse(campoDeTexto.validarEntradaDeTexto("test"))
+        assertFalse(campoDeTextoQuePodeSerVazio.validarEntradaDeTexto("teste de comprimento invalido"))
+        assertFalse(campoDeTextoQuePodeSerVazio.validarEntradaDeTexto("test"))
 
-        assertTrue(campoDeTexto.validarEntradaDeTexto(""))
-        assertTrue(campoDeTexto.validarEntradaDeTexto(null))
+        assertTrue(campoDeTextoQuePodeSerVazio.validarEntradaDeTexto(""))
+        assertTrue(campoDeTextoQuePodeSerVazio.validarEntradaDeTexto("     "))
+        assertTrue(campoDeTextoQuePodeSerVazio.validarEntradaDeTexto(null))
 
 
-        val campoDeTexto2 = Campo("tempalte_uid_345", TipoCampo.TEXTO)
+        val campoDeTexto2 = Campo( TipoCampo.TEXTO)
             .apply {
                 comprimentoMaximo = 20
                 comprimentoMinimo = 5
             }
 
         assertFalse(campoDeTexto2.validarEntradaDeTexto(""))
+        assertFalse(campoDeTexto2.validarEntradaDeTexto("    "))
         assertFalse(campoDeTexto2.validarEntradaDeTexto(null))
 
     }

@@ -1,13 +1,13 @@
 package dev.gmarques.bancodedados.presenter.fragmento_add_instancia
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -20,13 +20,14 @@ import dev.gmarques.bancodedados.databinding.InstanciaCampoBooleanoBinding
 import dev.gmarques.bancodedados.databinding.InstanciaCampoNumericoBinding
 import dev.gmarques.bancodedados.databinding.InstanciaCampoTextoBinding
 import dev.gmarques.bancodedados.domain.modelos.TipoCampo
-import dev.gmarques.bancodedados.domain.modelos.template.*
+import dev.gmarques.bancodedados.domain.modelos.template.Campo
 import dev.gmarques.bancodedados.domain.modelos.template.Campo.Companion.COMPRIMENTO_MAXIMO_PADRAO
 import dev.gmarques.bancodedados.domain.modelos.template.Campo.Companion.COMPRIMENTO_MINIMO_PADRAO
 import dev.gmarques.bancodedados.domain.modelos.template.Campo.Companion.MAIOR_QUE_PADRAO
 import dev.gmarques.bancodedados.domain.modelos.template.Campo.Companion.MENOR_QUE_PADRAO
 import dev.gmarques.bancodedados.domain.modelos.template.Campo.Companion.PODE_SER_VAZIO_PADRAO
 import kotlinx.coroutines.launch
+
 @AndroidEntryPoint
 class FragAddInstancia : Fragment() {
 
@@ -51,34 +52,45 @@ class FragAddInstancia : Fragment() {
         viewModel.template = args.template
 
         atualizarToolbar()
-        initBotaoAdd()
+        initBotaoConcluir()
         carregarUi()
+        observarValidareSalvar()
 
     }
 
-    private fun initBotaoAdd() {
-        binding.fabAddObjeto.setOnClickListener {
-
-            binding.root.clearFocus()
-
-            // TODO: deve chamar a validaçao e essa deve notificar a ui via livedata
-            lifecycleScope.launch {
-                if (viewModel.validarEntradas(views)) {
-                    viewModel.salvarObjeto(views)
-                    this@FragAddInstancia.findNavController().navigateUp()
-                } else notificar(getString(R.string.Verifique_os_valores_inseridos_e_tente_novamente))
+    /**
+     * Define um observador que monitora o livedata responsavel por informar se a validaçao e
+     * persistencia da instancia foram feitos, se sim, o fragmento é fechado, se não uma mensagem
+     * de erro genérica é exibida ao usuario para revisar os dados que ele inseriu no formulario
+     */
+    private fun observarValidareSalvar() {
+        viewModel.validarESalvar.observe(viewLifecycleOwner) {
+            it?.let {
+                if (it) findNavController().navigateUp()
+                else notificar(getString(R.string.Verifique_os_valores_inseridos_e_tente_novamente))
             }
+        }
+
+    }
+
+    private fun initBotaoConcluir() {
+        binding.fabAddObjeto.setOnClickListener {
+            binding.root.clearFocus()
+            viewModel.validareSalvarInstancia(views)
         }
     }
 
     private fun atualizarToolbar() {
 
         (requireActivity() as AppCompatActivity).supportActionBar?.title =
-            String.format(getString(R.string.Novo_a_instancia), viewModel.template.nome)
+                String.format(getString(R.string.Novo_a_instancia), viewModel.template.nome)
 
 
     }
 
+    /**
+     * Carrega todas as views referentes ao campos da instancia
+     * */
     private fun carregarUi() {
         viewModel.template.getCampos().forEach { entrada ->
             when (entrada.tipoCampo) {
@@ -116,9 +128,13 @@ class FragAddInstancia : Fragment() {
         views.add(view)
     }
 
+    /**
+     * Cria uma sequencia legivel das regras do campo, verificando se o valor de regra é diferente do
+     * padrao pra nao exibir informações desnecessarias pro usuario
+     * */
     private fun lerRegrasDoCampo(campo: Campo): String {
-        val regras = StringBuilder()
-        regras.appendLine(getString(R.string.O_campo_deve))
+
+        val regras = StringBuilder().appendLine(getString(R.string.O_campo_deve))
 
         if (campo.podeSerVazio == PODE_SER_VAZIO_PADRAO) regras.appendLine(getString(R.string.Ter_algum_conteudo))
 
@@ -136,24 +152,25 @@ class FragAddInstancia : Fragment() {
         }
 
         val regrasDeCampoDeTexto = {
-            {
-                if (campo.comprimentoMaximo != COMPRIMENTO_MAXIMO_PADRAO) regras.appendLine(
-                    String.format(
-                        getString(R.string.Ter_comprimento_menor_que_x), campo.comprimentoMaximo
-                    )
+
+            if (campo.comprimentoMaximo != COMPRIMENTO_MAXIMO_PADRAO) regras.appendLine(
+                String.format(
+                    getString(R.string.Ter_comprimento_maior_que_x), campo.comprimentoMaximo
                 )
-                if (campo.comprimentoMinimo != COMPRIMENTO_MINIMO_PADRAO) regras.appendLine(
-                    String.format(
-                        getString(R.string.Ter_comprimento_maior_que_x), campo.comprimentoMinimo
-                    )
+            )
+            if (campo.comprimentoMinimo != COMPRIMENTO_MINIMO_PADRAO) regras.appendLine(
+                String.format(
+                    getString(R.string.Ter_comprimento_menor_que_x), campo.comprimentoMinimo
                 )
-            }
+            )
         }
 
         when (campo.tipoCampo) {
-            TipoCampo.NUMERO -> regrasDeCampoNumerico()
-            TipoCampo.TEXTO -> regrasDeCampoDeTexto()
-            TipoCampo.BOOLEANO -> {}
+            TipoCampo.NUMERO -> regrasDeCampoNumerico.invoke()
+            TipoCampo.TEXTO -> regrasDeCampoDeTexto.invoke()
+            TipoCampo.BOOLEANO -> {
+                Log.d("USUK", "FragAddInstancia.lerRegrasDoCampo: esse campo nao tem regras")
+            }
         }
 
         return regras.toString()
