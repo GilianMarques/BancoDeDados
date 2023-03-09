@@ -17,25 +17,25 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 
-// TODO: testar as funçoes conforme forem entrando em uso
 @Singleton
-class Mapeador @Inject constructor(val jsonSerializador: JsonSerializador) {
+class Mapeador @Inject constructor(private val jsonSerializador: JsonSerializador) {
 
     suspend fun getInstanciaEntidade(mInstancia: Instancia): InstanciaEntidade = withContext(IO) {
         val jsonString =
-            JSONObject(jsonSerializador.toJSon(mInstancia)).apply { remove("propriedades") }
-                .toString()
+                JSONObject(jsonSerializador.toJSon(mInstancia))
+                    .apply { remove("propriedades") }
+                    .toString()
 
         jsonSerializador.fromJson(jsonString, InstanciaEntidade::class.java)
     }
 
     suspend fun getPropriedadeEntidade(mPropriedade: Propriedade): PropriedadeEntidade =
-        withContext(IO) {
-            jsonSerializador.fromJson(
-                jsonSerializador.toJSon(mPropriedade),
-                PropriedadeEntidade::class.java
-            )
-        }
+            withContext(IO) {
+                jsonSerializador.fromJson(
+                    jsonSerializador.toJSon(mPropriedade),
+                    PropriedadeEntidade::class.java
+                )
+            }
 
     suspend fun getTemplateEntidade(mTemplate: Template): TemplateEntidade = withContext(IO) {
 
@@ -55,16 +55,16 @@ class Mapeador @Inject constructor(val jsonSerializador: JsonSerializador) {
 
 
         val template: Template =
-            jsonSerializador.fromJson(
-                jsonSerializador.toJSon(templateComCampos.template),
-                Template::class.java
-            )
+                jsonSerializador.fromJson(
+                    jsonSerializador.toJSon(templateComCampos.template),
+                    Template::class.java
+                )
 
         templateComCampos.entradas.forEach {
 
             val entradaEntidadeString: String = jsonSerializador.toJSon(it)
             val campo: Campo =
-                jsonSerializador.fromJson(entradaEntidadeString, Campo::class.java)
+                    jsonSerializador.fromJson(entradaEntidadeString, Campo::class.java)
             template.addCampo(campo)
 
         }

@@ -26,6 +26,7 @@ import dev.gmarques.bancodedados.domain.modelos.template.Campo.Companion.COMPRIM
 import dev.gmarques.bancodedados.domain.modelos.template.Campo.Companion.MAIOR_QUE_PADRAO
 import dev.gmarques.bancodedados.domain.modelos.template.Campo.Companion.MENOR_QUE_PADRAO
 import dev.gmarques.bancodedados.domain.modelos.template.Campo.Companion.PODE_SER_VAZIO_PADRAO
+import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -71,13 +72,6 @@ class FragAddInstancia : Fragment() {
             }
         }
 
-    }
-
-    private fun initBotaoConcluir() {
-        binding.fabAddObjeto.setOnClickListener {
-            binding.root.clearFocus()
-            viewModel.validareSalvarInstancia(views)
-        }
     }
 
     private fun atualizarToolbar() {
@@ -175,6 +169,90 @@ class FragAddInstancia : Fragment() {
 
         return regras.toString()
 
+    }
+
+    private fun initBotaoConcluir() {
+        binding.fabAddObjeto.setOnClickListener {
+
+            binding.root.clearFocus()
+
+
+            if (validarCampos()) viewModel.salvarInstancia()
+            else viewModel.instancia.removerTodasAsPropriedades()
+        }
+
+    }
+
+    private fun validarCampos(): Boolean {
+
+        views.forEach {
+            when (it) {
+                is InstanciaCampoNumericoBinding -> if (!validarCampoNumerico(it)) return false
+                is InstanciaCampoTextoBinding -> if (!validarCampoDeTexto(it)) return false
+                is InstanciaCampoBooleanoBinding -> validarCampoBooleano(it)
+            }
+        }
+        return true
+    }
+
+    /**
+     * Extrai os dados do campo e solicita ao viewModel que salve na instancia retornando
+     * true pois nao é necessario fazer nenhuma validação em campos booleanos
+     * */
+    private fun validarCampoBooleano(instanciaCampoBooleano: InstanciaCampoBooleanoBinding): Boolean {
+
+        val campo = instanciaCampoBooleano.root.tag as Campo
+        val entradaUsuario = instanciaCampoBooleano.swEntrada.isChecked
+
+        viewModel.addPropriedadeNaInstancia(entradaUsuario, campo)
+
+        return true
+    }
+
+    /**
+     * Extrai os dados do campo de texto e solicita ao viewModel que salve na instancia e valide as informações
+     * de acordo com as regras de negocio do campo. Exibe uma mensagem de erro alem de exibir
+     * as regras do campo ao usuario caso a validação retorne false
+     * */
+    private fun validarCampoDeTexto(instanciaCampoTexto: InstanciaCampoTextoBinding): Boolean {
+
+        instanciaCampoTexto.tvRegras.visibility = View.GONE
+
+        val campo = instanciaCampoTexto.root.tag as Campo
+        val entradaUsuario = instanciaCampoTexto.edtEntrada.text.toString()
+
+        viewModel.addPropriedadeNaInstancia(entradaUsuario, campo)
+
+        return if (viewModel.validarCampoDeTexto(entradaUsuario, campo)) true
+        else {
+            instanciaCampoTexto.tvRegras.visibility = View.VISIBLE
+            instanciaCampoTexto.edtEntrada.requestFocus()
+            notificar(getString(R.string.Verifique_os_valores_inseridos_e_tente_novamente))
+            false
+        }
+    }
+
+    /**
+     * Extrai os dados do campo numerico e solicita ao viewModel que salve na instancia e valide as informações
+     * de acordo com as regras de negocio do campo. Exibe uma mensagem de erro alem de exibir
+     * as regras do campo ao usuario caso a validação retorne false
+     * */
+    private fun validarCampoNumerico(instanciaCampoNumerico: InstanciaCampoNumericoBinding): Boolean {
+
+        instanciaCampoNumerico.tvRegras.visibility = View.GONE
+
+        val campo = instanciaCampoNumerico.root.tag as Campo
+        val entradaUsuario = instanciaCampoNumerico.edtEntrada.text.toString().toDoubleOrNull()
+
+        viewModel.addPropriedadeNaInstancia(entradaUsuario, campo)
+
+        return if (viewModel.validarCampoNumerico(entradaUsuario, campo)) true
+        else {
+            instanciaCampoNumerico.tvRegras.visibility = View.VISIBLE
+            instanciaCampoNumerico.edtEntrada.requestFocus()
+            notificar(getString(R.string.Verifique_os_valores_inseridos_e_tente_novamente))
+            false
+        }
     }
 
     private fun notificar(mensagem: String) {

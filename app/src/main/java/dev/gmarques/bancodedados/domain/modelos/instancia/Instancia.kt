@@ -8,7 +8,17 @@ class Instancia : java.io.Serializable {
 
     val uid: String = UUID.randomUUID().toString()
 
-    val propriedades = ArrayList<Propriedade>()
+    private val propriedades = ArrayList<Propriedade>()
 
+
+    fun addPropriedade(propriedade: Propriedade) = propriedades.add(propriedade)
+
+    fun removerPropriedade(propriedade: Propriedade) = propriedades.remove(propriedade)
+
+    fun getPropriedades(): List<Propriedade> = Collections.unmodifiableList(propriedades)
+
+    fun removerTodasAsPropriedades() {
+        propriedades.clear()
+    }
 }
 

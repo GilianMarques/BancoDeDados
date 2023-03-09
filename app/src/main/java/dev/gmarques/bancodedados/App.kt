@@ -45,8 +45,8 @@ class App : Application() {
             val faixa = Campo(TipoCampo.NUMERO).apply {
                 templateUid = musica.uid
                 nome = "N° faixa"
-                maiorQue = 0
-                menorQue = 99
+                maiorQue = 0.0
+                menorQue = 99.0
             }
 
             templateDao.addOuAtualizar(mapeador.getTemplateEntidade(musica))

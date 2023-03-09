@@ -46,8 +46,8 @@ class FragAddCampoViewModel @Inject constructor() : ViewModel() {
 
             podeSerVazio = binding.swPodeFicarVazio.isChecked
 
-            maiorQue = binding.edtMaiorQue.text?.toString()?.toIntOrNull() ?: MAIOR_QUE_PADRAO
-            menorQue = binding.edtMenorQue.text?.toString()?.toIntOrNull() ?: MENOR_QUE_PADRAO
+            maiorQue = binding.edtMaiorQue.text?.toString()?.toDoubleOrNull() ?: MAIOR_QUE_PADRAO
+            menorQue = binding.edtMenorQue.text?.toString()?.toDoubleOrNull() ?: MENOR_QUE_PADRAO
 
             comprimentoMaximo = binding.edtComprimentoMax.text
                 ?.toString()?.toIntOrNull() ?: COMPRIMENTO_MAXIMO_PADRAO

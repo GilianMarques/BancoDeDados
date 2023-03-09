@@ -23,7 +23,7 @@ class Campo(var tipoCampo: TipoCampo) :
     /**
      * Valida o valor que o usuario esta tentando inserir no campo
      * */
-    fun validarEntradaNumerica(entradaUsuario: Long?): Boolean {
+    fun validarEntradaNumerica(entradaUsuario: Double?): Boolean {
 
         if (entradaUsuario == null) return podeSerVazio
         if (entradaUsuario <= maiorQue) return false
@@ -47,6 +47,12 @@ class Campo(var tipoCampo: TipoCampo) :
         return true
     }
 
+    /**
+     * As funçoes estaticas desse componente servem para validar as propriedades do campo no momento
+     * da sua criação como seu nome e suas regras, por exemplo: Existe um tamanho minimo e máximo
+     * que qualquer campo numerico pode receber, cabe a função de validação estatica verificar se
+     * a regra de tamanho minimo/maximo definida pelo usuario esta dentro desse limite.
+     * */
     companion object {
 
         // regras de negocio
@@ -59,16 +65,16 @@ class Campo(var tipoCampo: TipoCampo) :
         const val PODE_SER_VAZIO_PADRAO = false
         const val COMPRIMENTO_MAXIMO_PADRAO = 150
         const val COMPRIMENTO_MINIMO_PADRAO = 0
-        const val MAIOR_QUE_PADRAO = -999_999
-        const val MENOR_QUE_PADRAO = 999_999
+        const val MAIOR_QUE_PADRAO = -999_999.0
+        const val MENOR_QUE_PADRAO = 999_999.0
 
         /**
-         * Valida o nome do campo
+         * Valida o nome do campo de acordo com as regras de negocio vigentes
          * */
         fun validarNome(nome: String?): Boolean = nome?.isNotEmpty() == true
 
         /**
-         * Valida as regras do campo de texto
+         * Valida as regras do campo de texto de acordo com as regras de negocio vigentes
          * */
         fun validarRegrasTexto(compMaximo: Int?, compMinimo: Int?): Boolean {
 
@@ -81,7 +87,7 @@ class Campo(var tipoCampo: TipoCampo) :
         }
 
         /**
-         * Valida as regras do campo numerico
+         * Valida as regras do campo numerico de acordo com as regras de negocio vigentes
          * */
         fun validarRegrasNumero(maiorQue: Int?, menorQue: Int?): Boolean {
 

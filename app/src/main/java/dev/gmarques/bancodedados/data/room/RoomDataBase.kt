@@ -19,6 +19,8 @@ import dev.gmarques.bancodedados.data.room.dao.TemplateDao
     exportSchema = true
 )
 
+// TODO: criar DAO com relations entre Template e Campo - Instancia e Propriedade para se uma operaçao de escrita falhar nada seja salvo
+
 abstract class RoomDataBase : RoomDatabase() {
 
     abstract fun propriedadeDao(): PropriedadeDao

@@ -23,6 +23,10 @@ class InstanciaRepo @Inject constructor(
         fun getRepoInstancia(): InstanciaRepo;
     }
 
+    @Suppress("unused")
+            /**
+             * Usada para obter uma instancia dessa classe via Hilt EntryPointAccessors
+             * */
     fun getRepoInstancia(): InstanciaRepo {
         return this
     }
